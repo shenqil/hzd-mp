@@ -1,41 +1,107 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png" />
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
+  <view class="home">
+    <!-- tools -->
+    <view class="home_tools">
+      <view class="home_device-select">
+        设备选择
+        <image class="home_arrow-down" src="/static/arrow-down.png" />
+      </view>
     </view>
+
+    <!-- 环境监测 -->
+    <view class="home_monitor">
+      <view class="home_monitor-name">
+        <ModuleName :name="'环境监测'" />
+      </view>
+
+      <view class="home_monitor-list">
+        <MonitorElement />
+        <MonitorElement />
+        <MonitorElement />
+        <MonitorElement />
+      </view>
+    </view>
+
+    <!-- 控制信息 -->
+    <view class="home_control">
+      <view class="home_control-name">
+        <ModuleName :name="'控制中心'" />
+      </view>
+
+      <view class="home_control-list">
+        <ControlElement />
+        <ControlElement />
+      </view>
+    </view>
+
+    <!-- 待办信息 -->
   </view>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-const title = ref('home')
+<script lang="ts">
+import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
+import ModuleName from '@/components/ModuleName/index.vue'
+import MonitorElement from '@/components/MonitorElement/index.vue'
+import ControlElement from '@/components/ControlElement/index.vue'
+
+export default defineComponent({
+  components: {
+    ModuleName,
+    MonitorElement,
+    ControlElement
+  },
+  setup() {
+
+  }
+})
 </script>
 
-<style>
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+<style lang="scss" scoped>
+.home {
+  width: 100%;
+  padding: 20rpx;
+  box-sizing: border-box;
 
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
+  &_tools {
+    height: 40rpx;
+    font-size: 24rpx;
+    color: #333333;
+    text-align: center;
+    font-weight: 400;
+    letter-spacing: 1.01rpx;
+  }
 
-.text-area {
-  display: flex;
-  justify-content: center;
-}
+  &_device-select {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+  &_arrow-down {
+    width: 16rpx;
+    height: 12rpx;
+    margin-left: 10rpx;
+  }
+
+  &_monitor {
+    padding-top: 20rpx;
+
+    &-list {
+      margin-top: 10rpx;
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
+    }
+  }
+
+  &_control {
+    margin-top: 30rpx;
+
+    &-name {
+      padding-bottom: 20rpx;
+    }
+  }
 }
 </style>

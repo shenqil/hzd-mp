@@ -1,11 +1,11 @@
 <template>
   <view class="camera">
-    <camera device-position="back" flash="off" @error="error" class="camera-content"></camera>
-    <view v-if="isScanned" class="camera-scaning">
+    <camera device-position="back" flash="off" @error="error" class="camera_content"></camera>
+    <view v-if="isScanned" class="camera_scaning">
       <button @click="reScanHandle">重新扫描</button>
       这是一个西瓜
     </view>
-    <view v-else class="camera-scanned">
+    <view v-else class="camera_scanned">
       <image src="/static/scan.gif" />
     </view>
   </view>
@@ -101,12 +101,12 @@ export default defineComponent({
   height: 100%;
   position: relative;
 
-  &-content {
+  &_content {
     width: 100%;
     height: 100%;
   }
 
-  &-scaning {
+  &_scaning {
     width: 100%;
     height: 300px;
     position: absolute;
@@ -114,7 +114,7 @@ export default defineComponent({
     top: 100px;
   }
 
-  &-scanned {
+  &_scanned {
     width: 100%;
     height: 300px;
     position: absolute;
