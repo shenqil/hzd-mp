@@ -13,14 +13,14 @@
       },
       {
         "pagePath": "pages/control/index",
-        "iconPath": "static/tabbar/exhibitor.png",
-        "selectedIconPath": "static/tabbar/exhibitor-selected.png",
+        "iconPath": "static/tabbar/control.png",
+        "selectedIconPath": "static/tabbar/control-selected.png",
         "text": "管理"
       },
       {
         "pagePath": "pages/ar/index",
-        "iconPath": "static/tabbar/supply.png",
-        "selectedIconPath": "static/tabbar/supply-selected.png",
+        "iconPath": "static/tabbar/ar.png",
+        "selectedIconPath": "static/tabbar/ar-selected.png",
         "text": "AR"
       },
       {
