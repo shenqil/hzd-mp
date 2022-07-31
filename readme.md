@@ -14,3 +14,7 @@ npm run dev:mp-weixin
 ```
 npm run build:mp-weixin
 ```
+
+## VS code 推荐插件
++ Volar
++ Prettier
