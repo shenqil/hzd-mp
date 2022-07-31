@@ -1,0 +1,66 @@
+{
+  "tabBar": {
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "color": "#666",
+    "selectedColor": "#2A74FF",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-selected.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/control/index",
+        "iconPath": "static/tabbar/exhibitor.png",
+        "selectedIconPath": "static/tabbar/exhibitor-selected.png",
+        "text": "管理"
+      },
+      {
+        "pagePath": "pages/ar/index",
+        "iconPath": "static/tabbar/supply.png",
+        "selectedIconPath": "static/tabbar/supply-selected.png",
+        "text": "AR"
+      },
+      {
+        "pagePath": "pages/ucenter/index",
+        "iconPath": "static/tabbar/ucenter.png",
+        "selectedIconPath": "static/tabbar/ucenter-selected.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "pages": [
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "首页"
+      }
+    },
+    {
+      "path": "pages/control/index",
+      "style": {
+        "navigationBarTitleText": "管理中心"
+      }
+    },
+    {
+      "path": "pages/ar/index",
+      "style": {
+        "navigationBarTitleText": "AR识别"
+      }
+    },
+    {
+      "path": "pages/ucenter/index",
+      "style": {
+        "navigationBarTitleText": "我的页面"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}
