@@ -65,6 +65,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/ucenter/txl",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "通讯录",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
