@@ -5,11 +5,15 @@
         </view>
 
         <view class="control-element_block">
-            <view class="control-element_block-name">所属地块: {{ elementData.block }}</view>
+            <view class="control-element_block-name">
+                <view class="control-element_block-inner">
+                    所属地块: {{ elementData.block }}
+                </view>
+            </view>
             <view class="control-element_block-control">
-                <switch checked color="#12CE66" style="transform:scale(0.7)" />
-                <switch checked color="#12CE66" style="transform:scale(0.7)" />
-                <switch checked color="#12CE66" style="transform:scale(0.7)" />
+                <switch checked color="#12CE66" style="transform:scale(0.6)" />
+                <switch checked color="#12CE66" style="transform:scale(0.6)" />
+                <switch checked color="#12CE66" style="transform:scale(0.6)" />
             </view>
         </view>
     </view>
@@ -54,10 +58,29 @@ export default defineComponent({
     font-weight: 400;
 
     &_block {
+        width: 100%;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
+
+        &-name{
+            display: flex;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        &-inner{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &-control{
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-start;
+        }
     }
 }
 </style>

@@ -35,6 +35,18 @@
     </view>
 
     <!-- 待办信息 -->
+    <view class="home_info">
+      <view class="home_info-name">
+        <ModuleName :name="'待办信息'" />
+      </view>
+      <view class="home_info-list">
+        <InfoElement/>
+        <InfoElement/>
+        <InfoElement/>
+        <InfoElement/>
+        <InfoElement/>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -43,12 +55,14 @@ import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
+import InfoElement from '@/components/InfoElement/index.vue';
 
 export default defineComponent({
   components: {
     ModuleName,
     MonitorElement,
-    ControlElement
+    ControlElement,
+    InfoElement
   },
   setup() {
 
@@ -101,6 +115,14 @@ export default defineComponent({
 
     &-name {
       padding-bottom: 20rpx;
+    }
+  }
+
+  &_info {
+    margin-top: 40rpx;
+
+    &-list {
+      padding-top: 20rpx;
     }
   }
 }
