@@ -24,9 +24,13 @@
 
 <script lang="ts">
 import { defineComponent ,ref} from 'vue'
+import { useStore } from "vuex";
+import auth from '@/api/auth';
 
 export default defineComponent({
     setup() {
+		const store = useStore();
+
         const account = ref("")
         const password = ref("")
         const isChecked = ref(false)
@@ -42,7 +46,7 @@ export default defineComponent({
 		}
 		
 		// 账号登录
-		const login = (id:number)=>{
+		const login = async (id:number)=>{
 			if(isChecked.value === false){
 				uni.showToast({
 					title: `请勾选协议`,
@@ -65,6 +69,22 @@ export default defineComponent({
 					icon:'none'
 				})
 				return
+			}
+
+			try {
+				await store.dispatch('user/login',{
+					username: account.value,
+					password: password.value
+				})
+				uni.switchTab({
+					url: "/pages/home/index",
+				});
+			} catch (error) {
+				console.error(error)
+				uni.showToast({
+					title: `${error}` || `登录失败，网络错误`,
+					icon:'none'
+				})
 			}
 		}
 		

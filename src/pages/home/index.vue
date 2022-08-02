@@ -56,6 +56,7 @@ import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
+import demo from '@/api/demo';
 
 export default defineComponent({
   components: {
@@ -65,7 +66,9 @@ export default defineComponent({
     InfoElement
   },
   setup() {
-
+    onMounted(()=>{
+      demo.test()
+    })
   }
 })
 </script>

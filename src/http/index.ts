@@ -1,16 +1,8 @@
-export const showErrorMsg = (res: any, defaultMessage: string) => {
-  const { error, message, error_description } = res || {};
-  const msg =
-    error?.details?.[0]?.message ||
-    error?.message ||
-    message ||
-    error_description;
-  uni.showToast({
-    title: msg || defaultMessage,
-    icon: "none",
-    duration: 2000,
-  });
-};
+import store from '../store/index'
+
+function getToken() {
+  return (store.state as any).user.tokenInfo.token as string
+}
 
 export class HttpServer {
   baseUrl = "";
@@ -30,10 +22,10 @@ export class HttpServer {
         ...options,
       };
 
-      // // 携带token
-      // if (store.getters["user/authorization"]) {
-      //   _options.header.authorization = store.getters["user/authorization"];
-      // }
+      // 携带token
+      if (getToken() && url != '/xphUser/login') {
+        (_options.header as any)['token'] = getToken();
+      }
 
       uni.request({
         url: `${this.baseUrl}${url}`,
@@ -58,13 +50,8 @@ export class HttpServer {
       ...options,
     });
   }
-  errorHandler(res: any) {
-    // wx.hideLoading会关闭toast提示，故此给一个延迟
-    setTimeout(() => {
-      showErrorMsg(res, this.defaultErrorMessage);
-    }, 0);
-  }
 }
 
-const apiServer = new HttpServer(/**服务器基础URL**/)
-export default apiServer
+export const apiServer = new HttpServer("http://47.104.191.212:20010");
+export const apiServer2 = new HttpServer("http://47.104.191.212:8005");
+export default apiServer;
