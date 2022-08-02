@@ -11,9 +11,16 @@
 					<view class="a-a-b a-a-b-a">
 						{{name}}
 					</view>
+					
 					<view class="a-a-b" hover-class="a-a-b-hover" hover-start-time="1" hover-stay-time="100" v-for="(shua,shub) in shuju[name]" :key="shua" @tap="mingcheng(shua)">
-						{{shua}}
+						
+						<image class="img" src="/static/ucenter/touxiang.png" mode=""></image>
+						<div class="right">
+							<div class="top">{{shua}}</div>
+							<div class="bottom">18072101345 &nbsp;&nbsp;&nbsp;职位：A块园艺师</div>
+						</div>
 					</view>
+					
 				</view>
 			</view>
 		</view>
@@ -82,14 +89,28 @@
 	}
 </script>
 
-<style>
+<style scoped lang="scss">
 	.a-a-b {
 		position: relative;
 		width: 708rpx;
-		height: 80rpx;
-		line-height: 80rpx;
 		padding-left: 30rpx;
 		font-size: 30rpx;
+		display: flex;
+		padding: 10rpx 30rpx;
+		.img{
+			width: 120rpx;
+			height: 120rpx;
+		}
+		.right{
+			flex: 1;
+			padding: 20rpx;
+			.top{
+				line-height: 60rpx;
+			}
+			.bottom{
+				line-height: 60rpx;
+			}
+		}
 	}
 
 	.a-a-b::after {
@@ -108,8 +129,8 @@
 	}
 
 	.a-a-b-a {
-		height: 60rpx;
-		line-height: 60rpx;
+		height: 60rpx!important;
+		line-height: 60rpx!important;
 		border-bottom: 0.03125rpx solid #c8c7cc;
 		border-top: 0.03125rpx solid #c8c7cc;
 		background-color: #eee;

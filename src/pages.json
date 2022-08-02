@@ -74,6 +74,51 @@
             }
             
         }
+        ,{
+            "path" : "pages/control/videoCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "视频中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/plantingCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/task",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "作业管理",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/eventCenter",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "事件中心",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/imgDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

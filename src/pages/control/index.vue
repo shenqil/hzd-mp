@@ -2,7 +2,7 @@
   <view class="control">
 	<!-- 操作中心 -->
     <div class="control_action">
-      <div class="control_action_item" v-for="(item,index) in controlList" :key="index" @click="handelClick(item)">
+      <div class="control_action_item" v-for="(item,index) in controlList" :key="index" @click="handelClick(item.router)">
         <image class="control_action_img" :src="item.imgUrl" mode=""></image>
         <div class="control_action_title">{{item.name}}</div>
       </div>
@@ -10,9 +10,32 @@
 	<!-- 事件信息 -->
 	<view class="control_event">
 	  <view class="control_event_name">
-	    <ModuleName :name="'事件中心'" />
+	    <ModuleName :name="'事件信息'" />
 	  </view>
-	
+	  <view class="control_info_list">
+	    <InfoElement/>
+	    <InfoElement/>
+	  </view>
+	</view>
+	<!-- 种植信息 -->
+	<view class="control_event">
+	  <view class="control_event_name">
+	    <ModuleName :name="'种植信息'" />
+	  </view>
+	  <view class="control_info_list">
+	    <InfoElement/>
+	    <InfoElement/>
+	  </view>
+	</view>
+	<!-- 作业信息 -->
+	<view class="control_event">
+	  <view class="control_event_name">
+	    <ModuleName :name="'作业信息'" />
+	  </view>
+	  <view class="control_info_list">
+	    <InfoElement/>
+	    <InfoElement/>
+	  </view>
 	</view>
   </view>
 </template>
@@ -20,36 +43,40 @@
 <script  lang="ts">
 import { defineComponent, ref } from 'vue'
 import ModuleName from '@/components/ModuleName/index.vue'
-
+import InfoElement from '@/components/InfoElement/index.vue';
 export default defineComponent({
   components: {
-    ModuleName
+    ModuleName,
+	InfoElement
   },
   setup() {
     const controlList = ref([
       {
         name:"视频中心",
         imgUrl:"/static/control/video.png",
-        id: 0
+        router: "videoCenter"
       },
       {
         name:"种植中心",
         imgUrl:"/static/control/plant.png",
-        id: 1
+        router: "plantingCenter"
       },
       {
         name:"作业管理",
         imgUrl:"/static/control/task.png",
-        id: 2
+        router: "task"
       },
       {
         name:"事件中心",
         imgUrl:"/static/control/event.png",
-        id: 3
+        router: "eventCenter"
       },
     ])
-    const handelClick =  ( item: any ) =>{
-      console.log(item)
+    const handelClick =  ( router: string ) =>{
+      console.log(router)
+	  uni.navigateTo({
+	  	url:`/pages/control/${router}`
+	  })
     }
     return {
       controlList,
@@ -67,7 +94,7 @@ export default defineComponent({
 		box-shadow: 0px 9px 17px 0px rgba(98,157,252,0.15);
 		border-radius: 8.88px;
 		display: flex;
-		margin: 10rpx 20rpx;
+		margin: 10rpx 20rpx 40rpx 20rpx;
 		padding: 22rpx 10rpx;
 		.control_action_item{
 			width: 25%;
@@ -83,7 +110,9 @@ export default defineComponent({
 	}
 	.control_event{
 		margin: 20rpx;
-		padding: 40rpx 0;
+		.control_event_name{
+			margin: 20rpx;
+		}
 	}
 }
 </style>
