@@ -19,7 +19,7 @@
     </view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from 'vue'
 import alarmStatus from './img/alarmStatus.png'
 import eventStatus from './img/eventStatus.png'
@@ -41,12 +41,12 @@ export default defineComponent({
         }
     },
     setup() {
-        function filterPNG(type:string) {
+        function filterPNG(type) {
             const map = {
                 event: eventStatus
             }
 
-            return (map as any)[type] || eventStatus
+            return map[type] || eventStatus
         }
 
         return {

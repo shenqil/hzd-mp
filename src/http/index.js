@@ -1,7 +1,7 @@
-import store from '../store/index'
+import store from "../store/index";
 
 function getToken() {
-  return (store.state as any).user.tokenInfo.token as string
+  return store.state.user.tokenInfo.token;
 }
 
 export class HttpServer {
@@ -12,7 +12,7 @@ export class HttpServer {
     this.baseUrl = baseUrl;
     this.defaultOptions = options;
   }
-  get(url: string, params = {}, options = {}) {
+  get(url, params = {}, options = {}) {
     return new Promise((resolve, reject) => {
       const _options = {
         header: {
@@ -23,8 +23,8 @@ export class HttpServer {
       };
 
       // 携带token
-      if (getToken() && url != '/xphUser/login') {
-        (_options.header as any)['token'] = getToken();
+      if (getToken() && url != "/xphUser/login") {
+        _options.header["token"] = getToken();
       }
 
       uni.request({
@@ -44,7 +44,7 @@ export class HttpServer {
       });
     });
   }
-  post(url: string, params = {}, options = {}) {
+  post(url, params = {}, options = {}) {
     return this.get(url, params, {
       method: "POST",
       ...options,
