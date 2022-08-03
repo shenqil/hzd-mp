@@ -43,9 +43,9 @@ export default defineComponent({
     const userInfo = computed(() => store.getters['user/userInfo'])
 
     onMounted(() => {
-      setInterval(() => {
-        store.dispatch('user/setCount')
-      },1000)
+    //   setInterval(() => {
+    //     store.dispatch('user/setCount')
+    //   },1000)
     })
 	
 	// 通讯录

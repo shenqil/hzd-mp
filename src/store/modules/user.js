@@ -1,6 +1,6 @@
 import auth from '@/api/auth';
 
-function getStorageInfo(key:string) {
+function getStorageInfo(key) {
   const t = uni.getStorageSync(key)
   try {
       if(t) {
@@ -21,31 +21,31 @@ const state = {
 };
 
 const mutations = {
-  changeUserInfo(state: any, info: any) {
+  changeUserInfo(state, info) {
     state.userInfo = info;
+    uni.setStorage({
+      key: "user_key",
+      data: JSON.stringify(token),
+    });
   },
-  changeLowerRole(state: any, role: any) {
+  changeLowerRole(state, role) {
     state.lowerRole = role;
+    uni.setStorage({
+      key: "role_key",
+      data: JSON.stringify(role),
+    });
   },
-  setTokenInfo(state: any, token: any) {
+  setTokenInfo(state, token) {
     state.tokenInfo = token;
     uni.setStorage({
       key: "token_key",
       data: JSON.stringify(token),
     });
   },
-  changeCount(state: any, count: number) {
-    state.count = count;
-  },
 };
 
 const actions = {
-  setCount({ state, commit }: any) {
-    setTimeout(() => {
-      commit("changeCount", state.count + 1);
-    }, 1000);
-  },
-  async login({ commit }: any,{username,password}:any) {
+  async login({ commit },{username,password}) {
     const res = await auth.login({
       username,
       password
@@ -67,10 +67,10 @@ const actions = {
 };
 
 const getters = {
-  userInfo(state: any) {
+  userInfo(state) {
     return state.user;
   },
-  isLogin(state: any) {
+  isLogin(state) {
     return !!state.tokenInfo.token;
   },
 };
