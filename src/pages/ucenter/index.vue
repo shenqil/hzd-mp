@@ -38,9 +38,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const storeCount = computed((): number => store.getters['user/count'])
-    const isLogin = computed((): number => store.getters['user/isLogin'])
-    const userInfo = computed((): number => store.getters['user/userInfo'])
+    const storeCount = computed(()=> store.getters['user/count'])
+    const isLogin = computed(() => store.getters['user/isLogin'])
+    const userInfo = computed(() => store.getters['user/userInfo'])
 
     onMounted(() => {
       setInterval(() => {

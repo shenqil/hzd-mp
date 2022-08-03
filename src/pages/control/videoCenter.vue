@@ -38,19 +38,20 @@
 </template>
 
 <script>
+	import { defineComponent, ref } from 'vue'
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import imgTab from '@/components/imgTab/imgTab.vue'
 	
-	export default {
+	export default defineComponent({
 		components:{
 			ModuleName,
 			imgTab
 		},
-		data() {
-			return {
-				array: ['A型架第一监控设备', 'B型架第一监控设备', 'C型架第一监控设备', 'D型架第一监控设备'],
-				index: null,
-				photoList:[
+		setup() {
+			const array = ref(['A型架第一监控设备', 'B型架第一监控设备', 'C型架第一监控设备', 'D型架第一监控设备'])
+			const index = ref(null)
+			const photoList = ref(
+				[
 					{
 						url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
 						active: true
@@ -66,26 +67,30 @@
 					{
 						url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
 						active: true
-					},
-				],
-				
-			};
-		},
-		onLoad(){
-			this.getPhoto();
-		},
-		methods: {
-			bindPickerChange: function(e) {
+					}
+				]
+			)
+			
+			const bindPickerChange = (e)=>{
 				console.log('picker发送选择改变，携带值为', e.detail.value)
-				this.index = e.detail.value
-			},
-			handelAll(){
+				index.value = e.edetail.value
+			}
+			
+			const handelAll = ()=>{
 				uni.navigateTo({
 					url:"/pages/control/imgDetails"
 				})
 			}
+			return {
+				array,
+				index,
+				photoList,
+				bindPickerChange,
+				handelAll
+			}
 		}
-	}
+		
+	})
 </script>
 
 <style lang="scss" scoped>

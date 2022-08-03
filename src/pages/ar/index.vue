@@ -16,7 +16,7 @@ import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
 
 export default defineComponent({
   setup() {
-    const cameraCtx = ref<UniApp.CameraContext>();
+    const cameraCtx = ref(UniApp.CameraContext);
     const isScanned = ref(false)
     const timeHandle = ref(undefined)
 

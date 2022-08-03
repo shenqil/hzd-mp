@@ -119,6 +119,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/control/eventDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
