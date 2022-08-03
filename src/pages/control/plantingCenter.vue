@@ -20,7 +20,7 @@
 			</view>
 		  </view>
 		</view>
-		<image class="add" @click="handelAdd" src="../../static/control/jia.png" mode=""></image>
+		
 	</view>
 </template>
 
@@ -48,11 +48,7 @@
 				index1.value = e.detail.value
 			}
 			
-			const handelAdd = ()=>{
-				uni.navigateTo({
-					url: '/pages/control/eventDetails'
-				})
-			}
+			
 			return {
 				bindPickerChange,
 				array,
@@ -112,12 +108,6 @@
 	.planting_info_list{
 		margin: 20rpx 0;
 	}
-	.add{
-		position: fixed;
-		right: 50rpx;
-		bottom: 50rpx;
-		width: 100rpx;
-		height: 100rpx;
-	}
+	
 }
 </style>
