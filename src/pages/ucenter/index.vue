@@ -28,7 +28,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import ModuleName from '@/components/ModuleName/index.vue'

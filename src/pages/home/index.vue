@@ -50,7 +50,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'

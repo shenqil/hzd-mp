@@ -22,7 +22,7 @@
 	</view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent ,ref} from 'vue'
 import { useStore } from "vuex";
 import auth from '@/api/auth';
@@ -39,14 +39,14 @@ export default defineComponent({
 			console.log('隐私政策')
 		}
 		// 勾选协议
-		const checkboxChange = (e: any)=>{
+		const checkboxChange = (e)=>{
 			console.log(e,36)
 			isChecked.value = e.detail.value.length === 0 ? false : true;
 			console.log(isChecked.value ,40)
 		}
 		
 		// 账号登录
-		const login = async (id:number)=>{
+		const login = async (id)=>{
 			if(isChecked.value === false){
 				uni.showToast({
 					title: `请勾选协议`,

@@ -40,7 +40,7 @@
   </view>
 </template>
 
-<script  lang="ts">
+<script>
 import { defineComponent, ref } from 'vue'
 import ModuleName from '@/components/ModuleName/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
@@ -72,7 +72,7 @@ export default defineComponent({
         router: "eventCenter"
       },
     ])
-    const handelClick =  ( router: string ) =>{
+    const handelClick =  (router) =>{
       console.log(router)
 	  uni.navigateTo({
 	  	url:`/pages/control/${router}`

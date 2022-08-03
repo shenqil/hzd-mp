@@ -11,14 +11,14 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
 
 export default defineComponent({
   setup() {
     const cameraCtx = ref<UniApp.CameraContext>();
     const isScanned = ref(false)
-    const timeHandle = ref<any>(undefined)
+    const timeHandle = ref(undefined)
 
     function takePhoto() {
       return new Promise((resolve, reject) => {
@@ -71,7 +71,7 @@ export default defineComponent({
       isScanned.value = true
     }
 
-    function error(e: any) {
+    function error(e) {
       console.error(e);
     }
 
