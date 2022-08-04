@@ -16,16 +16,14 @@
 <script>
 	import { defineComponent, ref } from 'vue'
 	export default defineComponent({
-		components: {
-			
-		},
+		
 		setup() {
 			const array = ref(['人员受伤', '其他'])
 			const index = ref(null)
 			
 			const bindPickerChange = (e)=>{
-				console.log('picker发送选择改变，携带值为',e.edetail.value )
-				// index.value = e.edetail.value
+				console.log('picker发送选择改变，携带值为',e.detail.value )
+				index.value= e.detail.value
 			}
 			
 			return {
