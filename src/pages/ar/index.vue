@@ -1,11 +1,10 @@
 <template>
   <view class="camera">
     <camera v-show="!isScanned" device-position="back" flash="off" @error="error" class="camera_content"></camera>
-    <image v-show="isScanned" class="camera_content" :src="photo"></image>
+    <image v-show="isScanned" class="camera_content" :src="scanInfo.photo"></image>
 
     <view v-if="!isScanned" class="camera_scaning">
-      <!-- <img class="camera_scaning-img" src="/static/scaning.png" alt=""> -->
-      <view class="camera_scaning-img"></view>
+      <image class="camera_scaning-img" src="/static/scan-move.png" alt=""></image>
     </view>
     <view v-else class="camera_scanned">
       <view class="camera_scanned-title">{{ scanInfo.title }}</view>
@@ -17,6 +16,8 @@
         <view class="camera_scanned-button" @click="reScanHandle">继续识别</view>
       </view>
     </view>
+
+    <canvas class="canvas" canvas-id="myCanvas" :style="canvasStyle"></canvas>
   </view>
 </template>
 
@@ -29,15 +30,20 @@ import {
   nextTick
 } from "vue";
 import { onShow, onHide } from "@dcloudio/uni-app";
+// import upng from 'upng-js'
 let num = 0
 
 export default defineComponent({
   setup() {
-    const cameraCtx = ref(null);
-    const photo = ref('')
+    const timeHandle = ref(undefined)
+    const cameraListener = ref(null);
+    const cameraData = ref(null)
     const isScanned = ref(false);
     const isShow = ref(false);
-    const timeHandle = ref(undefined);
+    const canvasStyle = reactive({
+      width: '100vw',
+      height: "100vh"
+    })
     const scanInfo = reactive({
       title: "植物名称：木兰草",
       content:
@@ -50,41 +56,27 @@ export default defineComponent({
                  由于草莓色、香、味俱佳，而且营养价值高，含丰富维生素C ，有帮助消化的功效，所以被人们誉为“水果皇后”。\
          草莓：草莓不但汁水充足，味道鲜美，还对人体健康有着极大的益处。草莓可以改善 肤色，减轻腹泻，缓解疾病。\
          与此同时，草莓还可以巩固齿龈，清新口气，润泽喉部。",
+      photo: ""
     });
 
-    function takePhoto() {
-      return new Promise((resolve, reject) => {
-        if (!cameraCtx.value) {
-          reject("cameraCtx未定义");
-          return;
-        }
-        cameraCtx.value?.takePhoto({
-          quality: "high",
-          success: (res) => {
-            resolve(res.tempImagePath);
-          },
-          fail: (e) => {
-            reject(e);
-          },
-        });
-      });
-    }
-
     function reScanHandle() {
-      clearTimeout(timeHandle.value);
-      num = 0;
       isScanned.value = false;
-      startARTask();
+      startARTask()
     }
 
     /**
      * AR 任务
      * */
     async function arTask() {
+
       // 1.拍照
-      photo.value = await takePhoto();
+      scanInfo.photo = await toB64();
+      // scanInfo.photo = await toB642()
+      if (!scanInfo.photo) {
+        throw "no data"
+      }
       // 2.上传图片
-      console.log(photo);
+      console.log(scanInfo.photo, "photo");
 
       if (num++ < 6) {
         throw "no data"
@@ -95,7 +87,7 @@ export default defineComponent({
      * 开始任务
      * */
     async function startARTask() {
-      if (!isShow.value) {
+      if (!isShow.value || isScanned.value) {
         return
       }
       try {
@@ -103,12 +95,117 @@ export default defineComponent({
 
         isScanned.value = true;
       } catch (error) {
+        console.log(error)
         // 每秒调用一次
         timeHandle.value = setTimeout(() => {
           startARTask();
         }, 1000);
       }
     }
+
+    function startTacking() {
+      let count = 0;
+      const speedMaxCount = 30
+      const context = uni.createCameraContext();
+      if (!context.onCameraFrame) {
+        uni.showToast({
+          title: '基础库 2.7.0 开始支持".',
+          icon: 'none'
+        });
+        return;
+      }
+      cameraListener.value = markRaw(context.onCameraFrame(async function (res) {
+        if (isScanned.value || !isShow.value) {
+          return
+        }
+        if (count < speedMaxCount) {
+          count++;
+          return;
+        }
+        console.log(res)
+        count = 0;
+        cameraData.value = markRaw(res)
+      }))
+
+      cameraListener.value.start()
+    }
+
+    function stopTacking() {
+      if (cameraListener.value) {
+        cameraListener.value.stop();
+      }
+    }
+
+    async function toB64() {
+      return new Promise((resolve, reject) => {
+        const frame = cameraData.value
+        if (!frame) {
+          resolve('')
+          return
+        }
+        const u8Ary = new Uint8Array(frame.data);
+        const clamped = new Uint8ClampedArray(u8Ary);
+        canvasStyle.width = `${frame.width}px`
+        canvasStyle.height = `${frame.height}px`
+
+        nextTick(() => {
+          uni.canvasPutImageData({
+            canvasId: 'myCanvas',
+            x: 0,
+            y: 0,
+            width: frame.width,
+            height: frame.height,
+            data: clamped,
+            success() {
+              console.log('绘制成功')
+              // 转换临时文件
+              uni.canvasToTempFilePath({
+                x: 0,
+                y: 0,
+                width: frame.width,
+                height: frame.height,
+                canvasId: 'myCanvas',
+                fileType: 'jpg',
+                destWidth: frame.width,
+                destHeight: frame.height,
+                // 精度修改
+                quality: 0.8,
+                success(res) {
+                  console.log(res.tempFilePath, 'tempFilePath')
+                  resolve(res.tempFilePath)
+                  // // 临时文件转base64
+                  // uni.getFileSystemManager().readFile({
+                  //   filePath: res.tempFilePath, //选择图片返回的相对路径
+                  //   encoding: 'base64', //编码格式
+                  //   success: res => {
+                  //     resolve(res.data)
+                  //   }
+                  // })
+                },
+                fail(res) {
+                  reject(res)
+                }
+              })
+            },
+            fail(res) {
+              reject(res)
+            }
+          })
+        })
+
+      })
+    }
+
+    // async function toB642() {
+    //   const frame = cameraData.value
+    //   if (!frame) {
+    //     return ''
+    //   }
+
+    //   let pngData = upng.encode([frame.data], frame.width, frame.height)
+    //   let base64 = uni.arrayBufferToBase64(pngData)
+    //   return "data:image/png;base64," + base64
+    // }
 
     function error(e) {
       console.error(e);
@@ -117,25 +214,30 @@ export default defineComponent({
     onShow(() => {
       isShow.value = true
       nextTick(() => {
-        if (!cameraCtx.value) {
-          cameraCtx.value = markRaw(uni.createCameraContext());
+        if (cameraListener.value) {
+          cameraListener.value.start()
+        } else {
+          startTacking()
         }
 
         if (!isScanned.value) {
           reScanHandle()
         }
+
       })
       console.log("AR Show");
     });
     onHide(() => {
       console.log("AR Hide");
       isShow.value = false
-      clearTimeout(timeHandle.value);
+      cameraData.value = null
+      stopTacking()
+      clearTimeout(timeHandle.value)
     });
     return {
       isScanned,
-      photo,
       scanInfo,
+      canvasStyle,
       error,
       reScanHandle,
     };
@@ -150,7 +252,7 @@ export default defineComponent({
   }
 
   to {
-    transform: translateY(500rpx);
+    transform: translateY(480rpx);
   }
 }
 
@@ -173,16 +275,15 @@ export default defineComponent({
     left: 50%;
     margin-top: -250rpx;
     margin-left: -250rpx;
-    background-image: url("/static/scan.gif");
+    background-image: url("/static/scan.png");
     background-size: cover;
 
     &-img {
       width: 500rpx;
-      height: 10rpx;
+      height: 20rpx;
       position: absolute;
       top: 0;
       left: 0;
-      background-color: pink;
       transform: translateY(0);
       animation-name: move;
       animation-duration: 3s;
@@ -253,5 +354,13 @@ export default defineComponent({
       font-weight: 400;
     }
   }
+}
+
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 5000rpx;
+  left: -500rpx;
 }
 </style>
