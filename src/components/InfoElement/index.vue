@@ -1,5 +1,5 @@
 <template>
-    <view class="info-element">
+    <view class="info-element" @click="handelClick">
         <view class="info-element_content">
             告警内容: {{ elementData.content }}
         </view>
@@ -40,7 +40,7 @@ export default defineComponent({
             })
         }
     },
-    setup() {
+    setup(props, context) {
         function filterPNG(type) {
             const map = {
                 event: eventStatus
@@ -49,8 +49,13 @@ export default defineComponent({
             return map[type] || eventStatus
         }
 
+		const handelClick = ()=>{
+			context.emit('handelClick')
+		}
+		
         return {
-            filterPNG
+            filterPNG,
+			handelClick
         }
     }
 })

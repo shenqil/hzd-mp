@@ -15,7 +15,7 @@
 				</picker>
 			</div>
 			<view class="planting_info_list">
-			  <InfoElement v-for="(item,index) in 15 " :key="index" />
+			  <InfoElement @handelClick="handelClick" v-for="(item,index) in 15 " :key="index" />
 			  
 			</view>
 		  </view>
@@ -48,6 +48,11 @@
 				index1.value = e.detail.value
 			}
 			
+			const handelClick = ()=>{
+				uni.navigateTo({
+					url: '/pages/control/plantingDetails'
+				})
+			}
 			
 			return {
 				bindPickerChange,
@@ -55,7 +60,8 @@
 				index,
 				array1,
 				index1,
-				bindPickerChange1
+				bindPickerChange1,
+				handelClick
 			}
 		}
 	})
