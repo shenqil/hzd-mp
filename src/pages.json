@@ -128,6 +128,33 @@
             }
             
         }
+        ,{
+            "path" : "pages/control/eventAdd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "添加事件",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/plantingDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "种植详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/control/taskDetails",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "作业详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

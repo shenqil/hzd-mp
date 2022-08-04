@@ -15,7 +15,7 @@
 				</picker>
 			</div>
 			<view class="planting_info_list">
-			  <InfoElement v-for="(item,index) in 5 " :key="index" />
+			  <InfoElement @handelClick="handelClick" v-for="(item,index) in 5 " :key="index" />
 			  
 			</view>
 		  </view>
@@ -47,13 +47,21 @@
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				index1.value = e.detail.value
 			}
+			
+			const handelClick = ()=>{
+				uni.navigateTo({
+					url: '/pages/control/taskDetails'
+				})
+			}
+			
 			return {
 				bindPickerChange,
 				array,
 				index,
 				array1,
 				index1,
-				bindPickerChange1
+				bindPickerChange1,
+				handelClick
 			}
 		}
 	})
