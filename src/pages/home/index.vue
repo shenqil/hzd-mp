@@ -3,8 +3,10 @@
     <!-- tools -->
     <view class="home_tools">
       <view class="home_device-select">
-        设备选择
-        <image class="home_arrow-down" src="/static/arrow-down.png" />
+        <DevicePicker v-model:cur="blockData.cur" :list="blockData.list" :defaultTip="'地块选择'" />
+      </view>
+      <view class="home_device-select">
+        <DevicePicker v-model:cur="deviceData.cur" :list="deviceData.list" :defaultTip="'设备选择'" />
       </view>
     </view>
 
@@ -40,22 +42,23 @@
         <ModuleName :name="'待办信息'" />
       </view>
       <view class="home_info-list">
-        <InfoElement/>
-        <InfoElement/>
-        <InfoElement/>
-        <InfoElement/>
-        <InfoElement/>
+        <InfoElement />
+        <InfoElement />
+        <InfoElement />
+        <InfoElement />
+        <InfoElement />
       </view>
     </view>
   </view>
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, markRaw, onUnmounted } from "vue";
+import { defineComponent, ref, onMounted, markRaw, onUnmounted, reactive } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
+import DevicePicker from './components/DevicePicker'
 import demo from '@/api/demo';
 
 export default defineComponent({
@@ -63,14 +66,39 @@ export default defineComponent({
     ModuleName,
     MonitorElement,
     ControlElement,
-    InfoElement
+    InfoElement,
+    DevicePicker
   },
   setup() {
-    onMounted(()=>{
-      demo.test()
+    const { blockData, deviceData } = useDevice()
+    onMounted(() => {
+      console.log(demo)
+      // demo.test()
     })
+
+    return {
+      blockData,
+      deviceData
+    }
   }
 })
+
+function useDevice() {
+  const blockData = reactive({
+    list: ['块1', '块2', '块3', '块4', '块5'],
+    cur: -1
+  })
+
+  const deviceData = reactive({
+    list: ['设备1', '设备2', '设备3', '设备4', '设备5'],
+    cur: -1
+  })
+
+  return {
+    blockData,
+    deviceData
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -81,24 +109,10 @@ export default defineComponent({
 
   &_tools {
     height: 40rpx;
-    font-size: 24rpx;
-    color: #333333;
-    text-align: center;
-    font-weight: 400;
-    letter-spacing: 1.01rpx;
-  }
-
-  &_device-select {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-  }
-
-  &_arrow-down {
-    width: 16rpx;
-    height: 12rpx;
-    margin-left: 10rpx;
   }
 
   &_monitor {

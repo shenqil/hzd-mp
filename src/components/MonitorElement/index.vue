@@ -39,12 +39,18 @@ export default defineComponent({
 
     &_value {
         font-size: 40rpx;
-        font-weight: 800;
+        font-weight: 600;
         padding: 5rpx;
+        letter-spacing: 0.67rpx;
+        color: #000;
     }
 
     &_name {
-        font-size: 28rpx;
+        font-family: PingFangSC-Regular;
+        font-size: 24rpx;
+        color: #666666;
+        letter-spacing: 0.67rpx;
+        font-weight: 400;
         padding: 5rpx;
     }
 }
