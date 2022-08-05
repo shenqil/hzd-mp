@@ -25,7 +25,7 @@ const mutations = {
     state.userInfo = info;
     uni.setStorage({
       key: "user_key",
-      data: JSON.stringify(token),
+      data: JSON.stringify(info),
     });
   },
   changeLowerRole(state, role) {
