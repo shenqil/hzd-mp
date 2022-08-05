@@ -1,7 +1,7 @@
 <template>
     <view class="device-picker">
-        <picker @change="bindPickerChange" :value="cur" :range="list">
-            <view class="device-picker_input">{{ list[cur] || defaultTip }}
+        <picker @change="bindPickerChange" :value="cur" :range="list" :range-key="rangeKey">
+            <view class="device-picker_input">{{ renderText(list, cur, rangeKey) || defaultTip }}
                 <image class="device-picker_down" src="/static/arrow-down.png" />
             </view>
         </picker>
@@ -13,13 +13,17 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
     props: {
+        rangeKey: {
+            type: String,
+            default: ""
+        },
         list: {
             type: Array,
             default: () => []
         },
         cur: {
-            type: Number || String,
-            default: -1
+            type: String,
+            default: "-1"
         },
         defaultTip: {
             type: String,
@@ -32,8 +36,13 @@ export default defineComponent({
             context.emit('update:cur', e.detail.value)
         }
 
+        function renderText(list, cur, rangeKey) {
+            return list[cur] ? list[cur][rangeKey] : ''
+        }
+
         return {
-            bindPickerChange
+            bindPickerChange,
+            renderText
         }
     }
 })
@@ -50,9 +59,9 @@ export default defineComponent({
     text-align: center;
     font-weight: 400;
     letter-spacing: 1.01rpx;
-    
+
     &_input {
-        max-width: 200rpx;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

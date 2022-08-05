@@ -3,10 +3,10 @@
     <!-- tools -->
     <view class="home_tools">
       <view class="home_device-select">
-        <DevicePicker v-model:cur="blockData.cur" :list="blockData.list" :defaultTip="'地块选择'" />
+        <DevicePicker :rangeKey="'blockName'" v-model:cur="blockData.cur" :list="blockData.list" :defaultTip="'地块选择'" />
       </view>
       <view class="home_device-select">
-        <DevicePicker v-model:cur="deviceData.cur" :list="deviceData.list" :defaultTip="'设备选择'" />
+        <DevicePicker :rangeKey="'facName'" v-model:cur="deviceData.cur" :list="deviceData.list" :defaultTip="'设备选择'" />
       </view>
     </view>
 
@@ -52,14 +52,15 @@
   </view>
 </template>
 
-<script>
-import { defineComponent, ref, onMounted, markRaw, onUnmounted, reactive } from "vue";
+<script lang="ts">
+import { defineComponent, onMounted, reactive, computed, watch } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
-import DevicePicker from './components/DevicePicker'
-import demo from '@/api/demo';
+import DevicePicker from './components/DevicePicker.vue';
+import homeApi from '@/api/home';
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: {
@@ -70,10 +71,11 @@ export default defineComponent({
     DevicePicker
   },
   setup() {
-    const { blockData, deviceData } = useDevice()
+    const store = useStore()
+    const userInfo = computed(() => store.getters['user/userInfo'])
+    const { blockData, deviceData, getBlockList } = useDevice(userInfo)
     onMounted(() => {
-      console.log(demo)
-      // demo.test()
+      getBlockList()
     })
 
     return {
@@ -83,20 +85,78 @@ export default defineComponent({
   }
 })
 
-function useDevice() {
+// 设备列表Hook
+function useDevice(userInfo) {
   const blockData = reactive({
-    list: ['块1', '块2', '块3', '块4', '块5'],
-    cur: -1
+    list: [],
+    cur: "-1"
   })
 
   const deviceData = reactive({
-    list: ['设备1', '设备2', '设备3', '设备4', '设备5'],
-    cur: -1
+    list: [],
+    cur: "-1"
   })
 
+  const blockID = computed(() => {
+    const item = blockData.list[blockData.cur]
+    if (item) {
+      return item.id
+    }
+
+    return {}
+  })
+
+  const deviceID = computed(() => {
+    const item = deviceData.list[deviceData.cur]
+    if (item) {
+      return item.id
+    }
+
+    return {}
+  })
+
+  watch(blockID, () => {
+    getDeviceList()
+  })
+
+  // 获取地块列表
+  async function getBlockList() {
+    const res = await homeApi.getBlockList({
+      // creatorId: userInfo.value.id
+    })
+    if (!Array.isArray(res.obj.records)) {
+      console.error("返回数据不存在")
+      return
+    }
+    blockData.cur = '0'
+    blockData.list = res.obj.records
+  }
+
+  // 获取设备列表
+  async function getDeviceList() {
+    const blockId = blockID.value
+    if (!blockId) {
+      return
+    }
+
+    const res = await homeApi.getDeviceList({
+      creatorId: userInfo.value.id,
+      blockId
+    })
+
+    if (Array.isArray(!res.records)) {
+      return
+    }
+
+    deviceData.cur = "0"
+    deviceData.list = res.records
+  }
+
   return {
+    deviceID,
     blockData,
-    deviceData
+    deviceData,
+    getBlockList
   }
 }
 </script>
