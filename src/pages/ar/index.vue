@@ -1,49 +1,47 @@
 <template>
   <view class="camera">
-    <camera v-show="!isScanned" device-position="back" flash="off" @error="error" class="camera_content"></camera>
+    <camera v-show="!isScanned" device-position="back" flash="off" @error="error"
+      class="camera_content"></camera>
     <image v-show="isScanned" class="camera_content" :src="scanInfo.photo"></image>
 
-    <view v-if="!isScanned" class="camera_scaning">
-      <image class="camera_scaning-img" src="/static/scan-move.png" alt=""></image>
-    </view>
-    <view v-else class="camera_scanned">
-      <view class="camera_scanned-title">{{ scanInfo.title }}</view>
-      <view class="camera_scanned-content">
-        {{ scanInfo.content }}
+    <template v-if="isInitdone">
+      <view v-if="!isScanned" class="camera_scaning">
+        <image class="camera_scaning-img" src="/static/scan-move.png" alt="" :mode="'widthFix'"></image>
       </view>
+      <view v-else class="camera_scanned">
+        <view class="camera_scanned-title">{{ scanInfo.title }}</view>
+        <view class="camera_scanned-content">
+          {{ scanInfo.content }}
+        </view>
 
-      <view class="camera_scanned-bottom">
-        <view class="camera_scanned-button" @click="reScanHandle">继续识别</view>
+        <view class="camera_scanned-bottom">
+          <view class="camera_scanned-button" @click="reScanHandle">继续识别</view>
+        </view>
       </view>
-    </view>
+    </template>
 
     <canvas class="canvas" canvas-id="myCanvas" :style="canvasStyle"></canvas>
   </view>
 </template>
 
 <script>
-import {
-  defineComponent,
-  ref,
-  reactive,
-  markRaw,
-  nextTick
-} from "vue";
+import { defineComponent, ref, reactive, markRaw, nextTick } from "vue";
 import { onShow, onHide } from "@dcloudio/uni-app";
 // import upng from 'upng-js'
-let num = 0
+let num = 0;
 
 export default defineComponent({
   setup() {
-    const timeHandle = ref(undefined)
+    const isInitdone = ref(false);
+    const timeHandle = ref(undefined);
     const cameraListener = ref(null);
-    const cameraData = ref(null)
+    const cameraData = ref(null);
     const isScanned = ref(false);
     const isShow = ref(false);
     const canvasStyle = reactive({
-      width: '100vw',
-      height: "100vh"
-    })
+      width: "100vw",
+      height: "100vh",
+    });
     const scanInfo = reactive({
       title: "植物名称：木兰草",
       content:
@@ -56,30 +54,29 @@ export default defineComponent({
                  由于草莓色、香、味俱佳，而且营养价值高，含丰富维生素C ，有帮助消化的功效，所以被人们誉为“水果皇后”。\
          草莓：草莓不但汁水充足，味道鲜美，还对人体健康有着极大的益处。草莓可以改善 肤色，减轻腹泻，缓解疾病。\
          与此同时，草莓还可以巩固齿龈，清新口气，润泽喉部。",
-      photo: ""
+      photo: "",
     });
 
     function reScanHandle() {
       isScanned.value = false;
-      startARTask()
+      startARTask();
     }
 
     /**
      * AR 任务
      * */
     async function arTask() {
-
       // 1.拍照
       scanInfo.photo = await toB64();
       // scanInfo.photo = await toB642()
       if (!scanInfo.photo) {
-        throw "no data"
+        throw "no data";
       }
       // 2.上传图片
       console.log(scanInfo.photo, "photo");
 
       if (num++ < 6) {
-        throw "no data"
+        throw "no data";
       }
     }
 
@@ -88,14 +85,14 @@ export default defineComponent({
      * */
     async function startARTask() {
       if (!isShow.value || isScanned.value) {
-        return
+        return;
       }
       try {
         await arTask();
 
         isScanned.value = true;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         // 每秒调用一次
         timeHandle.value = setTimeout(() => {
           startARTask();
@@ -105,29 +102,32 @@ export default defineComponent({
 
     function startTacking() {
       let count = 0;
-      const speedMaxCount = 30
+      const speedMaxCount = 30;
       const context = uni.createCameraContext();
       if (!context.onCameraFrame) {
         uni.showToast({
           title: '基础库 2.7.0 开始支持".',
-          icon: 'none'
+          icon: "none",
         });
         return;
       }
-      cameraListener.value = markRaw(context.onCameraFrame(async function (res) {
-        if (isScanned.value || !isShow.value) {
-          return
-        }
-        if (count < speedMaxCount) {
-          count++;
-          return;
-        }
-        console.log(res)
-        count = 0;
-        cameraData.value = markRaw(res)
-      }))
+      cameraListener.value = markRaw(
+        context.onCameraFrame(async function (res) {
+          isInitdone.value = true
+          if (isScanned.value || !isShow.value) {
+            return;
+          }
+          if (count < speedMaxCount) {
+            count++;
+            return;
+          }
+          console.log(res);
+          count = 0;
+          cameraData.value = markRaw(res);
+        })
+      );
 
-      cameraListener.value.start()
+      cameraListener.value.start();
     }
 
     function stopTacking() {
@@ -138,41 +138,41 @@ export default defineComponent({
 
     async function toB64() {
       return new Promise((resolve, reject) => {
-        const frame = cameraData.value
+        const frame = cameraData.value;
         if (!frame) {
-          resolve('')
-          return
+          resolve("");
+          return;
         }
         const u8Ary = new Uint8Array(frame.data);
         const clamped = new Uint8ClampedArray(u8Ary);
-        canvasStyle.width = `${frame.width}px`
-        canvasStyle.height = `${frame.height}px`
+        canvasStyle.width = `${frame.width}px`;
+        canvasStyle.height = `${frame.height}px`;
 
         nextTick(() => {
           uni.canvasPutImageData({
-            canvasId: 'myCanvas',
+            canvasId: "myCanvas",
             x: 0,
             y: 0,
             width: frame.width,
             height: frame.height,
             data: clamped,
             success() {
-              console.log('绘制成功')
+              console.log("绘制成功");
               // 转换临时文件
               uni.canvasToTempFilePath({
                 x: 0,
                 y: 0,
                 width: frame.width,
                 height: frame.height,
-                canvasId: 'myCanvas',
-                fileType: 'jpg',
+                canvasId: "myCanvas",
+                fileType: "jpg",
                 destWidth: frame.width,
                 destHeight: frame.height,
                 // 精度修改
                 quality: 0.8,
                 success(res) {
-                  console.log(res.tempFilePath, 'tempFilePath')
-                  resolve(res.tempFilePath)
+                  console.log(res.tempFilePath, "tempFilePath");
+                  resolve(res.tempFilePath);
                   // // 临时文件转base64
                   // uni.getFileSystemManager().readFile({
                   //   filePath: res.tempFilePath, //选择图片返回的相对路径
@@ -183,17 +183,16 @@ export default defineComponent({
                   // })
                 },
                 fail(res) {
-                  reject(res)
-                }
-              })
+                  reject(res);
+                },
+              });
             },
             fail(res) {
-              reject(res)
-            }
-          })
-        })
-
-      })
+              reject(res);
+            },
+          });
+        });
+      });
     }
 
     // async function toB642() {
@@ -212,29 +211,29 @@ export default defineComponent({
     }
 
     onShow(() => {
-      isShow.value = true
+      isShow.value = true;
       nextTick(() => {
         if (cameraListener.value) {
-          cameraListener.value.start()
+          cameraListener.value.start();
         } else {
-          startTacking()
+          startTacking();
         }
 
         if (!isScanned.value) {
-          reScanHandle()
+          reScanHandle();
         }
-
-      })
+      });
       console.log("AR Show");
     });
     onHide(() => {
       console.log("AR Hide");
-      isShow.value = false
-      cameraData.value = null
-      stopTacking()
-      clearTimeout(timeHandle.value)
+      isShow.value = false;
+      cameraData.value = null;
+      stopTacking();
+      clearTimeout(timeHandle.value);
     });
     return {
+      isInitdone,
       isScanned,
       scanInfo,
       canvasStyle,
@@ -280,7 +279,6 @@ export default defineComponent({
 
     &-img {
       width: 500rpx;
-      height: 20rpx;
       position: absolute;
       top: 0;
       left: 0;
@@ -339,16 +337,15 @@ export default defineComponent({
     &-button {
       width: 240rpx;
       height: 80rpx;
-      background: #067DFF;
+      background: #067dff;
       border-radius: 8rpx;
       display: flex;
       justify-content: center;
       align-items: center;
 
-
       font-family: PingFangSC-Regular;
       font-size: 32rpx;
-      color: #FFFFFF;
+      color: #ffffff;
       letter-spacing: 1.41rpx;
       text-align: center;
       font-weight: 400;
