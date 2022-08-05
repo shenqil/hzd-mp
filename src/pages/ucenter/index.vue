@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <image class="user_title" src = "/static/ucenter/bgc.png">
-        <div class="user_bgc">
+        <div class="user_bgc" @click="edit">
 			<div class="user_left">
 			  <image src="../../static/ucenter/touxiang.png"></image>
 			</div>
@@ -62,12 +62,19 @@ export default defineComponent({
 			icon:'none'
 		})
 	})
+	
+	const edit = ()=>{
+		uni.navigateTo({
+			url:"/pages/ucenter/edit"
+		})
+	}
     return {
       storeCount,
       isLogin,
       userInfo,
 	  handeltxl,
-	  handelwx
+	  handelwx,
+	  edit
     }
   }
 })
