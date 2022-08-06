@@ -1,19 +1,19 @@
 <template>
     <view class="control-element">
         <view class="control-element_name">
-            设备名称: {{ elementData.name }}
+            设备名称: {{ elementData.ename || '' }}
         </view>
 
         <view class="control-element_block">
             <view class="control-element_block-name">
                 <view class="control-element_block-inner">
-                    所属地块: {{ elementData.block }}
+                    所属地块: {{ blockName || '' }}
                 </view>
             </view>
             <view class="control-element_block-control">
-                <switch checked color="#12CE66" style="transform:scale(0.6)" />
-                <switch checked color="#12CE66" style="transform:scale(0.6)" />
-                <switch checked color="#12CE66" style="transform:scale(0.6)" />
+                <switch :checked="elementData.evalue" color="#12CE66" style="transform:scale(0.6)" />
+                <!-- <switch checked color="#12CE66" style="transform:scale(0.6)" />
+                <switch checked color="#12CE66" style="transform:scale(0.6)" /> -->
             </view>
         </view>
     </view>
@@ -24,11 +24,18 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
     props: {
+        blockName: {
+            type: String,
+            default: ''
+        },
         elementData: {
             type: Object,
             default: () => ({
-                name: 'NO55号风机',
-                block: '科普园第二块地',
+                datetime: '',
+                ekey: '',
+                ename: '',
+                enum: '',
+                evalue: ''
             })
         }
     },
@@ -64,19 +71,19 @@ export default defineComponent({
         justify-content: space-between;
         align-items: center;
 
-        &-name{
+        &-name {
             display: flex;
             flex-grow: 1;
             min-width: 0;
         }
 
-        &-inner{
+        &-inner {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        &-control{
+        &-control {
             display: flex;
             flex-flow: row nowrap;
             justify-content: flex-start;

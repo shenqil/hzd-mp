@@ -54,4 +54,5 @@ export class HttpServer {
 
 export const apiServer = new HttpServer("http://47.104.191.212:20010");
 export const apiServer2 = new HttpServer("http://47.104.191.212:8005");
+export const apiServer3 = new HttpServer("http://47.104.191.212:20003");
 export default apiServer;

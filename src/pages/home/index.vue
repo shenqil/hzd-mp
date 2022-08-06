@@ -17,10 +17,9 @@
       </view>
 
       <view class="home_monitor-list">
-        <MonitorElement />
-        <MonitorElement />
-        <MonitorElement />
-        <MonitorElement />
+        <view v-for="item in monitorList" :key="item.ekey">
+          <MonitorElement :elementData="item" />
+        </view>
       </view>
     </view>
 
@@ -31,8 +30,9 @@
       </view>
 
       <view class="home_control-list">
-        <ControlElement />
-        <ControlElement />
+        <view v-for="item in controlList" :key="item.ekey">
+          <ControlElement :blockName="blockItem.blockName" :elementData="item" />
+        </view>
       </view>
     </view>
 
@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, computed, watch } from "vue";
+import { defineComponent, onMounted, ref, reactive, computed, watch } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
@@ -73,20 +73,26 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userInfo = computed(() => store.getters['user/userInfo'])
-    const { blockData, deviceData, getBlockList } = useDevice(userInfo)
+
+    const { blockItem, deviceID, blockData, deviceData, getBlockList } = useDeviceList(userInfo)
+    const { monitorList, controlList } = useDeviceInfo(deviceID)
+
     onMounted(() => {
       getBlockList()
     })
 
     return {
+      blockItem,
       blockData,
-      deviceData
+      deviceData,
+      monitorList,
+      controlList
     }
   }
 })
 
-// 设备列表Hook
-function useDevice(userInfo) {
+// 设备列表
+function useDeviceList(userInfo) {
   const blockData = reactive({
     list: [],
     cur: "-1"
@@ -97,19 +103,27 @@ function useDevice(userInfo) {
     cur: "-1"
   })
 
-  const blockID = computed(() => {
+  const blockItem = computed(() => {
     const item = blockData.list[blockData.cur]
     if (item) {
-      return item.id
+      return item
     }
 
     return {}
   })
 
+  const blockID = computed(() => {
+    if (blockItem.value.id) {
+      return blockItem.value.id
+    }
+
+    return ''
+  })
+
   const deviceID = computed(() => {
     const item = deviceData.list[deviceData.cur]
     if (item) {
-      return item.id
+      return item.facId
     }
 
     return {}
@@ -153,10 +167,41 @@ function useDevice(userInfo) {
   }
 
   return {
+    blockItem,
     deviceID,
     blockData,
     deviceData,
     getBlockList
+  }
+}
+
+// 设备信息
+function useDeviceInfo(deviceID) {
+  const monitorList = ref([])
+  const controlList = ref([])
+
+  watch(deviceID, () => {
+    getDeviceInfo()
+  })
+
+  // 获取设备信息
+  async function getDeviceInfo() {
+    const res = await homeApi.getDeviceInfo({
+      deviceId: deviceID.value
+    })
+
+    if (Array.isArray(res.currentDatas)) {
+      monitorList.value = res.currentDatas
+    }
+
+    if (Array.isArray(res.relayDatas)) {
+      controlList.value = res.relayDatas
+    }
+  }
+
+  return {
+    monitorList,
+    controlList
   }
 }
 </script>

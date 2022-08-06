@@ -1,4 +1,4 @@
-import { apiServer, apiServer2 } from "@/http/index";
+import { apiServer, apiServer2,apiServer3 } from "@/http/index";
 
 // 获取地块
 async function getBlockList(params = {}) {
@@ -18,7 +18,15 @@ async function getDeviceList(params = {}) {
   });
 }
 
+// 查询设备信息
+async function getDeviceInfo(params = {}) {
+  return await apiServer3.get("/hzdData/getCurrentDataByDeviceId", {
+    ...params,
+  });
+}
+
 export default {
   getBlockList,
   getDeviceList,
+  getDeviceInfo
 };

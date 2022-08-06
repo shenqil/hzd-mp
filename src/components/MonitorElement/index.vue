@@ -1,7 +1,7 @@
 <template>
     <view class="monitor-element">
-        <view class="monitor-element_value">{{ elementData.value }}</view>
-        <view class="monitor-element_name">{{ elementData.name }}</view>
+        <view class="monitor-element_value">{{ elementData.evalue }} {{elementData.eunit}}</view>
+        <view class="monitor-element_name">{{ elementData.ename }}</view>
     </view>
 </template>
 
@@ -13,9 +13,12 @@ export default defineComponent({
         elementData: {
             type: Object,
             default: () => ({
-                type: 'temperat',
-                name: '大气温度',
-                value: '32.6',
+                datetime: '',
+                ekey: '',
+                ename: '',
+                enum: '',
+                eunit: '',
+                evalue: ''
             })
         }
     },
@@ -38,11 +41,14 @@ export default defineComponent({
     align-items: center;
 
     &_value {
-        font-size: 40rpx;
+        font-size: 36rpx;
         font-weight: 600;
         padding: 5rpx;
         letter-spacing: 0.67rpx;
         color: #000;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-spacing: normal;
     }
 
     &_name {
