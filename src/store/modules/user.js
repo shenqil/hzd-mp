@@ -22,7 +22,7 @@ const state = {
 
 const mutations = {
   changeUserInfo(state, info) {
-    state.userInfo = info;
+    state.user = info;
     uni.setStorage({
       key: "user_key",
       data: JSON.stringify(info),

@@ -11,7 +11,7 @@
     </view>
 
     <!-- 环境监测 -->
-    <view class="home_monitor">
+    <view v-if="monitorList && monitorList.length" class="home_monitor">
       <view class="home_monitor-name">
         <ModuleName :name="'环境监测'" />
       </view>
@@ -24,14 +24,16 @@
     </view>
 
     <!-- 控制信息 -->
-    <view class="home_control">
+    <view v-if="controlList && controlList.length" class="home_control">
       <view class="home_control-name">
         <ModuleName :name="'控制中心'" />
       </view>
 
       <view class="home_control-list">
-        <view v-for="item in controlList" :key="item.ekey">
-          <ControlElement :blockName="blockItem.blockName" :elementData="item" />
+        <view class="home_control-item" v-for="item in controlList" :key="item.ekey">
+          <view style="width: 100%;">
+            <ControlElement :blockName="blockItem.blockName" :elementData="item" />
+          </view>
         </view>
       </view>
     </view>
@@ -237,6 +239,25 @@ function useDeviceInfo(deviceID) {
 
     &-name {
       padding-bottom: 20rpx;
+    }
+
+    &-list {
+      width: 100%;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-item {
+      min-width: 40%;
+      display: flex;
+      flex-grow: 1;
+      margin-left: 5%;
+    }
+
+    &-item:nth-child(odd) {
+      margin-left: 0px;
     }
   }
 

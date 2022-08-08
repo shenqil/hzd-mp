@@ -1,20 +1,11 @@
 <template>
     <view class="control-element">
         <view class="control-element_name">
-            设备名称: {{ elementData.ename || '' }}
+            {{ elementData.ename || '' }}
         </view>
 
-        <view class="control-element_block">
-            <view class="control-element_block-name">
-                <view class="control-element_block-inner">
-                    所属地块: {{ blockName || '' }}
-                </view>
-            </view>
-            <view class="control-element_block-control">
-                <switch :checked="elementData.evalue" color="#12CE66" style="transform:scale(0.6)" />
-                <!-- <switch checked color="#12CE66" style="transform:scale(0.6)" />
-                <switch checked color="#12CE66" style="transform:scale(0.6)" /> -->
-            </view>
+        <view class="control-element_el">
+            <switch :checked="elementData.evalue" color="#12CE66" style="transform:scale(0.5)" />
         </view>
     </view>
 </template>
@@ -47,6 +38,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .control-element {
+    width: 100%;
     box-sizing: border-box;
     height: 146rpx;
     background: #FFFFFF;
@@ -57,6 +49,8 @@ export default defineComponent({
     display: flex;
     flex-flow: column;
     justify-content: space-between;
+    align-items: flex-start;
+    flex-grow: 1;
 
     font-family: PingFangSC-Regular;
     font-size: 24rpx;
@@ -64,30 +58,12 @@ export default defineComponent({
     letter-spacing: 0.67rpx;
     font-weight: 400;
 
-    &_block {
+    &_el {
         width: 100%;
         display: flex;
         flex-flow: row nowrap;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-
-        &-name {
-            display: flex;
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        &-inner {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        &-control {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: flex-start;
-        }
     }
 }
 </style>
