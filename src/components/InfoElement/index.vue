@@ -1,13 +1,13 @@
 <template>
     <view class="info-element" @click="handelClick">
         <view class="info-element_content">
-            告警内容: {{ elementData.content }}
+            {{elementData.contentName}}: {{ elementData.content }}
         </view>
 
         <view class="info-element_discoverer">
             <view class="info-element_discoverer-name">
                 <view class="info-element_discoverer-inner">
-                    报告人: {{ elementData.discoverer }}
+                    {{elementData.name}}: {{ elementData.discoverer }}
                 </view>
             </view>
             <view class="info-element_discoverer-time">
@@ -15,7 +15,7 @@
             </view>
         </view>
 
-        <image class="info-element_type" :src="filterPNG(elementData.type)"></image>
+        <image class="info-element_type" v-if="!elementData.icont" :src="filterPNG(elementData.type)"></image>
     </view>
 </template>
 
@@ -36,7 +36,10 @@ export default defineComponent({
                 type: "event",
                 content: '第二地块监控设备异常',
                 discoverer: '文化人',
-                time: "14:00-15:20"
+                time: "14:00-15:20",
+				name: '处理人',
+				contentName: '告警内容',
+				id: null
             })
         }
     },
@@ -50,7 +53,7 @@ export default defineComponent({
         }
 
 		const handelClick = ()=>{
-			context.emit('handelClick')
+			context.emit('handelClick',{ id: props.elementData.id})
 		}
 		
         return {

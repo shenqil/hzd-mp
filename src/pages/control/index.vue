@@ -13,8 +13,7 @@
 	    <ModuleName :name="'事件信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement/>
-	    <InfoElement/>
+	    <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.createUser, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,id: item.id}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
 	<!-- 种植信息 -->
@@ -23,25 +22,24 @@
 	    <ModuleName :name="'种植信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement/>
-	    <InfoElement/>
+	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,id: item.id}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
 	<!-- 作业信息 -->
-	<view class="control_event">
+	<view class="control_event" >
 	  <view class="control_event_name">
 	    <ModuleName :name="'作业信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement/>
-	    <InfoElement/>
+	    <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenber, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,id: item.id}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
   </view>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted, reactive } from 'vue'
+import controlApi from '@/api/control';
 import ModuleName from '@/components/ModuleName/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
 export default defineComponent({
@@ -72,18 +70,110 @@ export default defineComponent({
         router: "eventCenter"
       },
     ])
+	
+	const { eventList, getEventList, playtingList, getPlantingList, taskList, getTaskList } = getListAll()
     const handelClick =  (router) =>{
       console.log(router)
 	  uni.navigateTo({
 	  	url:`/pages/control/${router}`
 	  })
     }
+	// 事件详情
+	const eventDetails = (id)=>{
+		uni.navigateTo({
+			url: `/pages/control/eventDetails?id=${id.id}`
+		})
+	}
+	// 种植详情
+	const playtingDetails = (id)=>{
+		
+		uni.navigateTo({
+			url: `/pages/control/plantingDetails?id=${id.id}`
+		})
+	}
+	// 作业详情
+	const taskDetails = (id)=>{
+		uni.navigateTo({
+			url: `/pages/control/taskDetails?id=${id.id}`
+		})
+	}
+	
+	onMounted(() => {
+	  getEventList()
+	  getPlantingList()
+	  getTaskList()
+	})
+	
+
+	
     return {
       controlList,
-      handelClick
+      handelClick,
+	  eventList,
+	  playtingList,
+	  taskList,
+	  eventDetails,
+	  playtingDetails,
+	  taskDetails
     }
    }
+   
+   
 })
+
+
+function getListAll (){
+  console.log(102)
+  const eventList = ref([])
+  const playtingList = ref([])
+  const taskList = ref([])
+  // 获取事件列表
+  async	function getEventList (){
+	  const res = await controlApi.getEventList({
+		  
+	  })
+	  if (!Array.isArray(res.obj.records)) {
+	     console.error("返回数据不存在")
+	     return
+	  }
+	  eventList.value = res.obj.records
+   }
+   
+   // 获取种植列表
+   async  function getPlantingList (){
+   	  const res = await controlApi.getPlantingList({
+   		  
+   	  })
+   	  if (!Array.isArray(res.obj.records)) {
+   	     console.error("返回数据不存在")
+   	     return
+   	  }
+   	  playtingList.value = res.obj.records
+    }
+	
+	
+	// 获取作业列表
+	async  function getTaskList (){
+		  const res = await controlApi.getTaskList({
+			  
+		  })
+		  if (!Array.isArray(res.obj.records)) {
+		     console.error("返回数据不存在")
+		     return
+		  }
+		  taskList.value = res.obj.records
+	 }
+	 
+   
+   return {
+	   eventList,
+   	   getEventList,
+	   playtingList,
+	   getPlantingList,
+	   taskList,
+	   getTaskList
+   }
+}
 </script>
 
 <style lang="scss" scoped>
