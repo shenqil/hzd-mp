@@ -1,37 +1,53 @@
 <template>
 	<view class="eventDetails">
-		<ContentLine :leftContent="'事件类型'" :rightContent="'天气恶劣'" />
+		<ContentLine :leftContent="'事件类型'" :rightContent="dataDetails.eventTypeName" />
 		<div class="eventDetails_describe">
 			<div class="describe_title">事件描述</div>
-			<div class="describe_content">第二地块天气出现异常</div>
+			<div class="describe_content">{{dataDetails.describe}}</div>
 		</div>
 		<div class="eventDetails_describe">
-			<div class="describe_title">图片添加</div>
+			<div class="describe_title">图片</div>
 			<div class="describe_img">
-				<image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d" mode=""></image>
-				<image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d" mode=""></image>
-				<image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d" mode=""></image>
-				<image src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d" mode=""></image>
+				<image v-for="(item,index) in  dataDetails.photo" :src="item" mode=""></image>
+				<div class="nodeData" v-if="dataDetails.photo.length === 0">暂无图片</div>
 			</div>
 		</div>
-		<ContentLine :leftContent="'处理人'" :rightContent="'张三'" />
-		<ContentLine :leftContent="'备注'" :rightContent="'下雨'" />
+		<ContentLine :leftContent="'处理人'" :rightContent="dataDetails.handleMenber" />
+		<ContentLine :leftContent="'备注'" :rightContent="dataDetails.remark" />
 	</view>
 </template>
 
 <script>
-	import { defineComponent, ref } from 'vue'
+	
+	import controlApi from '@/api/control';
+	import { defineComponent, ref, onMounted } from 'vue'
 	import ContentLine from '@/components/ContentLine/ContentLine.vue'
+	let parmes = null;
 	export default defineComponent({
 		components: {
 			ContentLine
 		},
+		onLoad(options){
+			parmes = JSON.parse(options.textObj)
+			
+			parmes.photo =parmes.photo? parmes.photo.split(',') : []
+			console.log(parmes)
+		},
 		setup() {
+			const dataDetails = ref(null)
+			onMounted(()=>{
+				dataDetails.value = parmes;
+			})
+			
+			
 			return {
-				
+				dataDetails
 			}
 		}
+		
 	})
+	
+	
 </script>
 
 <style lang="scss">
@@ -57,6 +73,10 @@
 				width: 180rpx;
 				height: 180rpx;
 				margin: 10rpx;
+			}
+			.nodeData{
+				text-align: center;
+				line-height: 80rpx;
 			}
 		}
 	}

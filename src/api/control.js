@@ -29,8 +29,14 @@ async function getPlantingList(params = {}) {
   });
 }
 
+// 获取事件详情
+async function getEventDetails(params = {}) {
+  return await apiServer.get(`/npEventReport/getById/${params}`);
+}
+
 export default {
 	getEventList,
 	getTaskList,
 	getPlantingList,
+	getEventDetails,
 }

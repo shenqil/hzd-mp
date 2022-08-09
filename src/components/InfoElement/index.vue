@@ -53,7 +53,7 @@ export default defineComponent({
         }
 
 		const handelClick = ()=>{
-			context.emit('handelClick',{ id: props.elementData.id})
+			context.emit('handelClick',{ ...props.elementData })
 		}
 		
         return {

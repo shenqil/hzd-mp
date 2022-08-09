@@ -1,25 +1,34 @@
 <template>
 	<view class="taskDetails">
-		<ContentLine leftContent="所属地块" rightContent="A地块" />
-		<ContentLine leftContent="作业类型" rightContent="草莓" />
-		<ContentLine leftContent="作业时间" rightContent="2020-06-26 09:10:00" />
-		<ContentLine leftContent="种植人员" rightContent="123" />
-		<ContentLine leftContent="状态" rightContent="7" />
-		<ContentLine leftContent="创建人" rightContent="亩" />
-		<ContentLine leftContent="备注" rightContent="22235" />
+		<ContentLine leftContent="所属地块" :rightContent="dataDetails.blockName||'-'" />
+		<ContentLine leftContent="作业类型" :rightContent="dataDetails.farmingTypeName" />
+		<ContentLine leftContent="作业时间" :rightContent="dataDetails.farmingTime" />
+		<ContentLine leftContent="作业人员" :rightContent="dataDetails.farmingMenberName" />
+		<ContentLine leftContent="状态" :rightContent="dataDetails.statusName" />
+		<ContentLine leftContent="创建人" :rightContent="dataDetails.createUserName || '-'" />
+		<ContentLine leftContent="备注" :rightContent="dataDetails.remark" />
 	</view>
 </template>
 
 <script>
-	import { defineComponent, ref } from 'vue'
+	import { defineComponent, ref ,onMounted} from 'vue'
 	import ContentLine from '@/components/ContentLine/ContentLine.vue'
+	let parmes = null;
 	export default defineComponent({
 		components: {
 			ContentLine
 		},
+		onLoad(options){
+			parmes = JSON.parse(options.textObj)
+		},
 		setup() {
+			const dataDetails = ref(null)
+			
+			onMounted(()=>{
+				dataDetails.value = parmes
+			})
 			return {
-				
+				dataDetails
 			}
 		}
 	})

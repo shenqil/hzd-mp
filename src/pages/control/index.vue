@@ -13,7 +13,7 @@
 	    <ModuleName :name="'事件信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.createUser, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,id: item.id}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.handleMenberName, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,...item}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
 	<!-- 种植信息 -->
@@ -22,7 +22,7 @@
 	    <ModuleName :name="'种植信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,id: item.id}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,...item}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
 	<!-- 作业信息 -->
@@ -31,7 +31,7 @@
 	    <ModuleName :name="'作业信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenber, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,id: item.id}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenberName, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,...item}" :key="index" v-show="index<2"/>
 	  </view>
 	</view>
   </view>
@@ -79,22 +79,24 @@ export default defineComponent({
 	  })
     }
 	// 事件详情
-	const eventDetails = (id)=>{
+	const eventDetails = (item)=>{
+		let textObj = JSON.stringify(item)
 		uni.navigateTo({
-			url: `/pages/control/eventDetails?id=${id.id}`
+			url: `/pages/control/eventDetails?textObj=${textObj}`
 		})
 	}
 	// 种植详情
-	const playtingDetails = (id)=>{
-		
+	const playtingDetails = (item)=>{
+		let textObj = JSON.stringify(item)
 		uni.navigateTo({
-			url: `/pages/control/plantingDetails?id=${id.id}`
+			url: `/pages/control/plantingDetails?textObj=${textObj}`
 		})
 	}
 	// 作业详情
-	const taskDetails = (id)=>{
+	const taskDetails = (item)=>{
+		let textObj = JSON.stringify(item)
 		uni.navigateTo({
-			url: `/pages/control/taskDetails?id=${id.id}`
+			url: `/pages/control/taskDetails?textObj=${textObj}`
 		})
 	}
 	
