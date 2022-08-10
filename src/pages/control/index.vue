@@ -13,7 +13,7 @@
 	    <ModuleName :name="'事件信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.handleMenberName, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,...item}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.handleMenberName, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,...item}" :key="index"/>
 	  </view>
 	</view>
 	<!-- 种植信息 -->
@@ -22,7 +22,7 @@
 	    <ModuleName :name="'种植信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,...item}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,...item}" :key="index"/>
 	  </view>
 	</view>
 	<!-- 作业信息 -->
@@ -31,7 +31,7 @@
 	    <ModuleName :name="'作业信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenberName, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,...item}" :key="index" v-show="index<2"/>
+	    <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenberName, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,...item}" :key="index"/>
 	  </view>
 	</view>
   </view>
@@ -44,6 +44,7 @@ import ModuleName from '@/components/ModuleName/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
 export default defineComponent({
   components: {
+	  
     ModuleName,
 	InfoElement
   },
@@ -80,6 +81,7 @@ export default defineComponent({
     }
 	// 事件详情
 	const eventDetails = (item)=>{
+		console.log(item,84)
 		let textObj = JSON.stringify(item)
 		uni.navigateTo({
 			url: `/pages/control/eventDetails?textObj=${textObj}`
@@ -129,10 +131,16 @@ function getListAll (){
   const eventList = ref([])
   const playtingList = ref([])
   const taskList = ref([])
+  let params = {
+  		  pageNum: 0,
+  		  pageSize: 2,
+		  param: {}
+  }
   // 获取事件列表
   async	function getEventList (){
+	  
 	  const res = await controlApi.getEventList({
-		  
+		  ...params
 	  })
 	  if (!Array.isArray(res.obj.records)) {
 	     console.error("返回数据不存在")
@@ -144,7 +152,7 @@ function getListAll (){
    // 获取种植列表
    async  function getPlantingList (){
    	  const res = await controlApi.getPlantingList({
-   		  
+   		  ...params
    	  })
    	  if (!Array.isArray(res.obj.records)) {
    	     console.error("返回数据不存在")
@@ -157,7 +165,7 @@ function getListAll (){
 	// 获取作业列表
 	async  function getTaskList (){
 		  const res = await controlApi.getTaskList({
-			  
+			  ...params
 		  })
 		  if (!Array.isArray(res.obj.records)) {
 		     console.error("返回数据不存在")

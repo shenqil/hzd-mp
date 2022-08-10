@@ -106,7 +106,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "事件中心",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
             
         }

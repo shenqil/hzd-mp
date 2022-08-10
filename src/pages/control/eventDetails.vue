@@ -8,7 +8,7 @@
 		<div class="eventDetails_describe">
 			<div class="describe_title">图片</div>
 			<div class="describe_img">
-				<image v-for="(item,index) in  dataDetails.photo" :src="item" mode=""></image>
+				<image v-for="(item,index) in  dataDetails.photo" :key="index" :src="item" mode=""></image>
 				<div class="nodeData" v-if="dataDetails.photo.length === 0">暂无图片</div>
 			</div>
 		</div>
@@ -28,15 +28,16 @@
 			ContentLine
 		},
 		onLoad(options){
-			parmes = JSON.parse(options.textObj)
 			
+			parmes = JSON.parse(options.textObj)
 			parmes.photo =parmes.photo? parmes.photo.split(',') : []
-			console.log(parmes)
 		},
 		setup() {
 			const dataDetails = ref(null)
 			onMounted(()=>{
+				
 				dataDetails.value = parmes;
+				console.log(dataDetails.value,40)
 			})
 			
 			

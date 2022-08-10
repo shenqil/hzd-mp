@@ -15,8 +15,8 @@
 				</picker>
 			</div>
 			<view class="planting_info_list">
-			  <InfoElement @handelClick="eventDetails" v-for="(item,index) in 5 " :key="index" />
-			  
+			  <InfoElement @handelClick="eventDetails" v-for="(item,index) in eventList" :elementData="{ content: item.describe,discoverer: item.handleMenberName, time: item.createTime,contentName:'事件内容',name:'处理人', icont: 1,...item}" :key="index"/>
+			  <div class="load_more">没有更多了</div>
 			</view>
 		  </view>
 		</view>
@@ -25,19 +25,39 @@
 </template>
 
 <script>
-    import { defineComponent, ref } from 'vue'
+    import { defineComponent, ref, onMounted } from 'vue'
+	import controlApi from '@/api/control';
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import InfoElement from '@/components/InfoElement/index.vue';
+	let pageNum = 1;
+	let pageSize = 10;
+	let pages = 0
+	let eventListAll = []
 	export default defineComponent({
 		components: {
 		  ModuleName,
 		  InfoElement
+		},
+		onReachBottom() {
+			console.log(pages,'我到达底部了')
+			if(pageNum<pages){
+				pageNum++
+				dataList('onReach')
+			}
+			
+		},
+		onPullDownRefresh() {
+			console.log('refresh');
+			setTimeout(function () {
+				uni.stopPullDownRefresh();
+			}, 1000);
 		},
 		setup() {
 			const array = ref(['A型架第一', 'B型架第一', 'C型架第一', 'D型架第一'])
 			const array1 = ref(['A型架第一', 'B型架第一', 'C型架第一监控设备', 'D型架第一'])
 			const index = ref(null)
 			const index1 = ref(null)
+			const status = ref('more')
 			const bindPickerChange= (e)=>{
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				index.value = e.detail.value
@@ -60,6 +80,12 @@
 				})
 			}
 			
+			const { eventList, getEventList} = dataList()
+			
+			onMounted(()=>{
+				getEventList()
+			})
+			
 			return {
 				bindPickerChange,
 				array,
@@ -68,10 +94,47 @@
 				index1,
 				bindPickerChange1,
 				handelAdd,
-				eventDetails
+				eventDetails,
+				eventList,
+				status
 			}
 		}
 	})
+	
+	
+	function dataList(type){
+		if(type){
+			getEventList()
+		}
+		const eventList = ref([])
+		
+		async function getEventList(){
+			let params = {
+				pageNum: pageNum,
+				pageSize: pageSize,
+				param: {
+					
+				}
+			}
+			const res = await controlApi.getEventList({
+					  ...params
+			})
+			if (!Array.isArray(res.obj.records)) {
+			   console.error("返回数据不存在")
+			   return
+			}
+			pages = res.obj.pages
+			eventListAll = eventListAll.concat(res.obj.records)
+			eventList.value = eventListAll;
+			
+		}
+		
+		return {
+			eventList,
+			getEventList
+			
+		}
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -126,6 +189,12 @@
 		bottom: 50rpx;
 		width: 100rpx;
 		height: 100rpx;
+	}
+	.load_more{
+		text-align: center;
+		line-height: 80rpx;
+		color: #666;
+		font-size: 32rpx;
 	}
 }
 </style>
