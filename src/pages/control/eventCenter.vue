@@ -5,13 +5,13 @@
 		  <view class="planting_event_name">
 		    <ModuleName :name="'事件中心'" />
 			<div class="type">
-				<picker @change="bindPickerChange" :value="index" :range="array">
-					<view class="uni-input">{{array[index] || '事件类型'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+				<picker @change="bindPickerChange" :range-key="'itemText'" :value="index" :range="eventTypeList">
+					<view class="uni-input">{{index != null?eventTypeList[index].itemText : '事件类型'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<div class="massif">
-				<picker @change="bindPickerChange1" :value="index1" :range="array1">
-					<view class="uni-input">{{array1[index1] || '所属地块'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+				<picker @change="bindPickerChange1" :range-key="'username'" :value="userIndex" :range="userList">
+					<view class="uni-input">{{userIndex != null?userList[userIndex].username : '处理人员'  }} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<view class="planting_info_list">
@@ -25,116 +25,196 @@
 </template>
 
 <script>
-    import { defineComponent, ref, onMounted } from 'vue'
+    import { defineComponent, ref, onMounted, getCurrentInstance , watch} from 'vue'
 	import controlApi from '@/api/control';
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import InfoElement from '@/components/InfoElement/index.vue';
 	let pageNum = 1;
 	let pageSize = 10;
-	let pages = 0
-	let eventListAll = []
+	let pages = 0;
 	export default defineComponent({
 		components: {
 		  ModuleName,
 		  InfoElement
 		},
+		data() {
+		    return {
+		      eventTypeList: [],
+			  userList: [],
+			  index: null,
+			  userIndex: null,
+			  eventList:[]
+		    }
+		  },
+		created(){
+			
+			this.getEventList()
+			this.getSelectList()
+		},
 		onReachBottom() {
-			console.log(pages,'我到达底部了')
 			if(pageNum<pages){
 				pageNum++
-				dataList('onReach')
+				this.getEventList()
 			}
 			
 		},
 		onPullDownRefresh() {
-			console.log('refresh');
-			setTimeout(function () {
-				uni.stopPullDownRefresh();
-			}, 1000);
+			pageNum = 1 ;
+			this.eventList = []
+			this.getEventList()
+			
 		},
-		setup() {
-			const array = ref(['A型架第一', 'B型架第一', 'C型架第一', 'D型架第一'])
-			const array1 = ref(['A型架第一', 'B型架第一', 'C型架第一监控设备', 'D型架第一'])
-			const index = ref(null)
-			const index1 = ref(null)
-			const status = ref('more')
-			const bindPickerChange= (e)=>{
-				console.log('picker发送选择改变，携带值为', e.detail.value)
-				index.value = e.detail.value
-			}
-			
-			const bindPickerChange1= (e)=>{
-				console.log('picker发送选择改变，携带值为', e.detail.value)
-				index1.value = e.detail.value
-			}
-			
-			const handelAdd = ()=>{
+		methods:{
+			// 获取筛选列表
+			async getSelectList(){
+				let params = {
+					
+				}
+				const res = await controlApi.getxphUserList({
+						  ...params
+				})
+				this.userList = res.obj.records
+				
+				const res1 = await controlApi.getsysDictList({
+						 dictCode: 'eventType'
+				})
+				
+				this.eventTypeList = res1.obj
+			},
+			// 获取事件列表
+			async getEventList(){
+				let params = {
+					pageNum: pageNum,
+					pageSize: pageSize,
+					param: {
+						handleMenber: this.usierIndex !=null? this.userList[this.userIndex].id : null,
+						eventType: this.index !=null? this.eventTypeList[this.index].itemValue : null,
+					}
+				}
+				const res = await controlApi.getEventList({
+						  ...params
+				})
+				uni.stopPullDownRefresh();
+				if (!Array.isArray(res.obj.records)) {
+				   console.error("返回数据不存在")
+				   return
+				}
+				pages = res.obj.pages
+				this.eventList = this.eventList.concat(res.obj.records)
+				
+			},
+			handelAdd(){
 				uni.navigateTo({
 					url: '/pages/control/eventAdd'
 				})
-			}
-			
-			const eventDetails = ()=>{
+			},
+			eventDetails(){
 				uni.navigateTo({
 					url: '/pages/control/eventDetails'
 				})
-			}
+			},
+			bindPickerChange(e){
+				console.log('picker发送选择改变，携带值为', e.detail.value)
+				this.index = e.detail.value;
+				pageNum = 1 ;
+				this.eventList = []
+				this.getEventList()
+			},
+			bindPickerChange1(e){
+				console.log('picker发送选择改变，携带值为', e.detail.value)
+				this.userIndex = e.detail.value;
+				pageNum = 1 ;
+				this.eventList = []
+				this.getEventList()
+			},
 			
-			const { eventList, getEventList} = dataList()
+		},
+		// setup() {
+		// 	const array = ref()
+		// 	const array1 = ref(['A型架第一', 'B型架第一', 'C型架第一监控设备', 'D型架第一'])
+		// 	const index = ref(null)
+		// 	const index1 = ref(null)
+		// 	const status = ref('more')
 			
-			onMounted(()=>{
-				getEventList()
-			})
+		// 	const bindPickerChange= (e)=>{
+		// 		console.log('picker发送选择改变，携带值为', e.detail.value)
+		// 		index.value = e.detail.value
+		// 	}
 			
-			return {
-				bindPickerChange,
-				array,
-				index,
-				array1,
-				index1,
-				bindPickerChange1,
-				handelAdd,
-				eventDetails,
-				eventList,
-				status
-			}
-		}
+		// 	const bindPickerChange1= (e)=>{
+		// 		console.log('picker发送选择改变，携带值为', e.detail.value)
+		// 		index1.value = e.detail.value
+		// 	}
+			
+		// 	const handelAdd = ()=>{
+		// 		uni.navigateTo({
+		// 			url: '/pages/control/eventAdd'
+		// 		})
+		// 	}
+			
+		// 	const eventDetails = ()=>{
+		// 		uni.navigateTo({
+		// 			url: '/pages/control/eventDetails'
+		// 		})
+		// 	}
+			
+		// 	const { eventList, getEventList} = dataList()
+		// 	const curInstance = getCurrentInstance()
+			
+		// 	onMounted(()=>{
+				
+		// 		getEventList()
+		// 	})
+			
+		// 	return {
+		// 		bindPickerChange,
+		// 		array,
+		// 		index,
+		// 		array1,
+		// 		index1,
+		// 		bindPickerChange1,
+		// 		handelAdd,
+		// 		eventDetails,
+		// 		eventList,
+		// 		status
+		// 	}
+		// }
 	})
 	
 	
-	function dataList(type){
-		if(type){
-			getEventList()
-		}
-		const eventList = ref([])
+	// function dataList(type){
+	// 	if(type){
+	// 		getEventList()
+	// 	}
+	// 	const eventList = ref([])
 		
-		async function getEventList(){
-			let params = {
-				pageNum: pageNum,
-				pageSize: pageSize,
-				param: {
+	// 	async function getEventList(){
+	// 		let params = {
+	// 			pageNum: pageNum,
+	// 			pageSize: pageSize,
+	// 			param: {
 					
-				}
-			}
-			const res = await controlApi.getEventList({
-					  ...params
-			})
-			if (!Array.isArray(res.obj.records)) {
-			   console.error("返回数据不存在")
-			   return
-			}
-			pages = res.obj.pages
-			eventListAll = eventListAll.concat(res.obj.records)
-			eventList.value = eventListAll;
+	// 			}
+	// 		}
+	// 		const res = await controlApi.getEventList({
+	// 				  ...params
+	// 		})
+	// 		if (!Array.isArray(res.obj.records)) {
+	// 		   console.error("返回数据不存在")
+	// 		   return
+	// 		}
+	// 		pages = res.obj.pages
+	// 		eventListAll = eventListAll.concat(res.obj.records)
+	// 		eventList.value = eventListAll;
 			
-		}
+	// 	}
 		
-		return {
-			eventList,
-			getEventList
+	// 	return {
+	// 		eventList,
+	// 		getEventList
 			
-		}
-	}
+	// 	}
+	// }
 </script>
 
 <style lang="scss" scoped>

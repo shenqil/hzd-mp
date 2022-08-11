@@ -28,9 +28,29 @@ async function getEventDetails(params = {}) {
   return await apiServer.get(`/npEventReport/getById/${params}`);
 }
 
+
+// 获取地块列表
+async function getBlockList(params = {}) {
+  return await apiServer.post(`/npBlock/getPages`,{ ...params });
+}
+
+// 获取用户列表
+async function getxphUserList(params = {}) {
+  return await apiServer.post(`/xphUser/getPages`,{ ...params });
+}
+
+// 获取字典查询列表
+async function getsysDictList(params = {}) {
+  return await apiServer.get(`/sysDict/select/BydictCode`,{ ...params });
+}
+
+
 export default {
 	getEventList,
 	getTaskList,
 	getPlantingList,
 	getEventDetails,
+	getBlockList,
+	getxphUserList,
+	getsysDictList,
 }
