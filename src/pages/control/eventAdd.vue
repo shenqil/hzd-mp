@@ -4,8 +4,8 @@
 			<div class="taskDetails_left">事件类型</div>
 			<div class="taskDetails_right">
 				<view class="uni-list-cell-db">
-					<picker @change="bindPickerChange" :value="index" :range="array">
-						<view class="uni-input">{{array[index] || '请选择设备'}}
+					<picker @change="bindPickerChange" :range-key="'itemText'" :value="index"  :range="eventTypeList">
+						<view class="uni-input">{{index != null?eventTypeList[index].itemText : '请选择'}}
 							<image class="xia" src="../../static/control/xia.png" mode=""></image>
 						</view>
 					</picker>
@@ -15,7 +15,7 @@
 		<div class="eventDetails_describe">
 			<div class="describe_title">事件描述</div>
 			<div class="describe_textarea">
-				<textarea maxlength="500" placeholder="请填写事件描述" v-model="textarea" />
+				<textarea maxlength="500" placeholder="请填写事件描述" v-model="describe" />
 			</div>
 		</div>
 		<div class="eventDetails_describe">
@@ -28,21 +28,34 @@
 
 			</div>
 		</div>
-		<div class="taskDetails_box">
+		<!-- <div class="taskDetails_box">
 			<div class="taskDetails_left">处理人</div>
 			<div class="describe_input">
-				<input type="text" placeholder="请输入处理人">
+				<input type="text" v-model="handleMenber" placeholder="请输入处理人">
+			</div>
+		</div> -->
+		
+		<div class="taskDetails_box">
+			<div class="taskDetails_left">处理人</div>
+			<div class="taskDetails_right">
+				<view class="uni-list-cell-db">
+					<picker @change="bindPickerChange1" :range-key="'username'" :value="index"  :range="userList">
+						<view class="uni-input">{{userIndex != null?userList[userIndex].username : '请输入处理人'}}
+							<image class="xia" src="../../static/control/xia.png" mode=""></image>
+						</view>
+					</picker>
+				</view>
 			</div>
 		</div>
 		<div class="taskDetails_box">
 			<div class="taskDetails_left">备注</div>
 			<div class="describe_input">
-				<input type="text" placeholder="请输入备注">
+				<input type="text" v-model="remark" placeholder="请输入备注">
 			</div>
 		</div>
 		
 		<div class="btn">
-			<button type="primary">提交</button>
+			<button type="primary" @click="submit">提交</button>
 		</div>
 	</view>
 </template>
@@ -50,31 +63,41 @@
 <script>
 	import {
 		defineComponent,
-		ref
+		ref,
+		onMounted
 	} from 'vue'
+	import { apiServer } from "@/http/index";
+	import store from "@/store/index";
+	import controlApi from '@/api/control';
 	export default defineComponent({
 
 		setup() {
-			const array = ref(['人员受伤', '其他'])
+			
 			const index = ref(null)
-			const textarea = ref(null)
+			const userIndex = ref(null)
+			const describe = ref(null)
 			const list = ref([])
 			const imgList = ref([])
+			const remark = ref(null)
 			const bindPickerChange = (e) => {
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				index.value = e.detail.value
+			}
+			const bindPickerChange1 = (e) => {
+				console.log('picker发送选择改变，携带值为', e.detail.value)
+				userIndex.value = e.detail.value
 			}
 			const addImg = (e) => {
 				uni.chooseImage({
 					success: (chooseImageRes) => {
 						const tempFilePaths = chooseImageRes.tempFilePaths;
 						uni.uploadFile({
-							url: 'http://47.104.191.212:20010/file/image/uplode', //仅为示例，非真实的接口地址
+							url:apiServer.baseUrl + '/file/image/uplode', //仅为示例，非真实的接口地址
 							filePath: tempFilePaths[0],
 							name: 'file',
 							formData: {
 								'user': 'test',
-								sysDictItemId:30
+								 sysDictItemId:30
 							},
 							success: (uploadFileRes) => {
 							 
@@ -85,22 +108,128 @@
 				});
 				
 			}
-
+			const { eventTypeList, getSelectList, userList, getEventReport } = selectAll()
+			onMounted(()=>{
+				getSelectList()
+			})
+			
 			const handelDel = (index)=>{
 				imgList.value.splice(index,1)
 			}
-			
+			// 提交
+			const submit = ()=>{
+				
+				if(index.value ===null){
+					uni.showToast({
+						title: `请选择事件类型`,
+						icon:'none'
+					})
+					return
+				}
+				
+				if(describe.value === null){
+					uni.showToast({
+						title: `请填写事件描述`,
+						icon:'none'
+					})
+					return
+				}
+				
+				if(userIndex.value ===null){
+					uni.showToast({
+						title: `请选择处理人`,
+						icon:'none'
+					})
+					return
+				}
+				
+				if(imgList.value.length === 0){
+					uni.showToast({
+						title: `请上传图片`,
+						icon:'none'
+					})
+					return
+				}
+				
+				
+				let params = {
+					eventType: index.value !=null? eventTypeList.value[index.value].itemValue : null,
+					handleMenber: userIndex.value !=null? userList.value[userIndex.value].id : null,
+					describe: describe.value,
+					remark: remark.value,
+					photo: imgList.value.toString(),
+					createUser: store.state.user.tokenInfo.userId
+				}
+				getEventReport(params)
+			}
 			return {
-				array,
 				index,
 				bindPickerChange,
-				textarea,
+				describe,
 				addImg,
 				imgList,
-				handelDel
+				handelDel,
+				eventTypeList,
+				userList,
+				userIndex,
+				bindPickerChange1,
+				remark,
+				submit
 			}
 		}
 	})
+	
+	function selectAll(){
+		const eventTypeList = ref([])
+		
+		const userList = ref([])
+		userList
+		// 获取筛选列表
+		async function getSelectList(){
+			
+			const res = await controlApi.getsysDictList({
+					 dictCode: 'eventType'
+			})
+			
+			eventTypeList.value = res.obj;
+			
+			
+			const res1 = await controlApi.getxphUserList({
+					 
+			})
+			userList.value = res1.obj.records
+		}
+		
+		async function getEventReport(params){
+			console.log(params,168)
+			
+			const res = await controlApi.getEventReport({
+					 ...params
+			})
+			if(res.flag === 1){
+				uni.navigateBack({
+					delta: 1
+				});
+				uni.showToast({
+					title: res.msg,
+					icon:'success'
+				})
+				
+			}else{
+				uni.showToast({
+					title: res.msg,
+					icon:'error'
+				})
+			}
+		}
+		
+		return {
+			eventTypeList,
+			getSelectList,
+			userList,
+			getEventReport
+		}
+	}
 </script>
 
 <style lang="scss" scoped>

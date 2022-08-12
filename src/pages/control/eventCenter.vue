@@ -47,7 +47,8 @@
 		    }
 		  },
 		created(){
-			
+			pageNum = 1 ;
+			this.eventList = []
 			this.getEventList()
 			this.getSelectList()
 		},
@@ -87,7 +88,7 @@
 					pageNum: pageNum,
 					pageSize: pageSize,
 					param: {
-						handleMenber: this.usierIndex !=null? this.userList[this.userIndex].id : null,
+						handleMenber: this.userIndex !=null? this.userList[this.userIndex].id : null,
 						eventType: this.index !=null? this.eventTypeList[this.index].itemValue : null,
 					}
 				}

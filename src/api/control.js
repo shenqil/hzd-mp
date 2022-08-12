@@ -45,6 +45,14 @@ async function getsysDictList(params = {}) {
 }
 
 
+// 添加事件
+async function getEventReport(params = {}) {
+  return await apiServer.postFromData(`/npEventReport/insert`,
+  { 
+	...params
+  });
+}
+
 export default {
 	getEventList,
 	getTaskList,
@@ -53,4 +61,5 @@ export default {
 	getBlockList,
 	getxphUserList,
 	getsysDictList,
+	getEventReport,
 }

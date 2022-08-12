@@ -20,9 +20,11 @@ async function getDeviceList(params = {}) {
 
 // 查询设备信息
 async function getDeviceInfo(params = {}) {
-  return await apiServer3.get("/hzdData/getCurrentDataByDeviceId", {
-    ...params,
-  });
+  return await apiServer3.get("/hzdData/getCurrentDataByDeviceId",
+   {
+	   params: params
+   }
+  );
 }
 
 export default {

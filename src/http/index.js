@@ -12,11 +12,11 @@ export class HttpServer {
     this.baseUrl = baseUrl;
     this.defaultOptions = options;
   }
-  get(url, params = {}, options = {}) {
+  get(url, params = {}, options = {}, isFromData = false) {
     return new Promise((resolve, reject) => {
       const _options = {
         header: {
-          "content-type": "application/json",
+          "content-type": !isFromData?  "application/json":'application/x-www-form-urlencoded',
         },
         ...this.defaultOptions,
         ...options,
@@ -49,6 +49,14 @@ export class HttpServer {
       method: "POST",
       ...options,
     });
+  }
+  
+  postFromData(url, params = {}, options = {}){
+	  return this.get(url, params, {
+		method: "POST",
+		...options,
+		 
+	  }, true);
   }
 }
 
