@@ -17,7 +17,7 @@
       </view>
 
       <view class="home_monitor-list">
-        <view v-for="item in monitorList" :key="item.ekey">
+        <view class="home_monitor-item" v-for="item in monitorList" :key="item.ekey">
           <MonitorElement :elementData="item" />
         </view>
       </view>
@@ -32,7 +32,7 @@
       <view class="home_control-list">
         <view class="home_control-item" v-for="item in controlList" :key="item.ekey">
           <view style="width: 100%;">
-            <ControlElement :blockName="blockItem.blockName" :elementData="item" />
+            <ControlElement :deviceID="deviceID" :elementData="item" />
           </view>
         </view>
       </view>
@@ -54,7 +54,7 @@
   </view>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, onMounted, ref, reactive, computed, watch } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
@@ -76,15 +76,33 @@ export default defineComponent({
     const store = useStore()
     const userInfo = computed(() => store.getters['user/userInfo'])
 
-    const { blockItem, deviceID, blockData, deviceData, getBlockList } = useDeviceList(userInfo)
-    const { monitorList, controlList } = useDeviceInfo(deviceID)
+    const { deviceID, blockData, deviceData, deviceListLoading, blockInit } = useDeviceList(userInfo)
+    const { monitorList, controlList, deviceInfoLoading } = useDeviceInfo(deviceID)
+
+    const loading = computed(() => {
+      if (deviceListLoading.value || deviceInfoLoading.value) {
+        return true
+      }
+
+      return false
+    })
+
+    watch(loading, (v) => {
+      if (v) {
+        uni.showLoading({
+          title: "加载中..."
+        });
+      } else {
+        uni.hideLoading()
+      }
+    })
 
     onMounted(() => {
-      getBlockList()
+      blockInit()
     })
 
     return {
-      blockItem,
+      deviceID,
       blockData,
       deviceData,
       monitorList,
@@ -95,16 +113,21 @@ export default defineComponent({
 
 // 设备列表
 function useDeviceList(userInfo) {
+  const blockLoading = ref(false)
+  const deviceLoading = ref(false)
+  // 地块
   const blockData = reactive({
     list: [],
     cur: "-1"
   })
 
+  // 设备
   const deviceData = reactive({
     list: [],
     cur: "-1"
   })
 
+  // 当前选中块
   const blockItem = computed(() => {
     const item = blockData.list[blockData.cur]
     if (item) {
@@ -114,6 +137,7 @@ function useDeviceList(userInfo) {
     return {}
   })
 
+  // 当前选中块ID
   const blockID = computed(() => {
     if (blockItem.value.id) {
       return blockItem.value.id
@@ -122,17 +146,43 @@ function useDeviceList(userInfo) {
     return ''
   })
 
+  // 当前选中设备ID
   const deviceID = computed(() => {
     const item = deviceData.list[deviceData.cur]
     if (item) {
       return item.facId
     }
 
-    return {}
+    return ""
   })
 
-  watch(blockID, () => {
-    getDeviceList()
+  const deviceListLoading = computed(() => {
+    if (blockLoading.value || deviceLoading.value) {
+      return true
+    }
+
+    return false
+  })
+
+  watch(blockID, async () => {
+    if (deviceLoading.value) {
+      console.log("getDeviceList 加载中")
+      return
+    }
+    deviceLoading.value = true
+    try {
+      await getDeviceList()
+    } catch (error) {
+      console.error(error)
+      setTimeout(() => {
+        uni.showToast({
+          title: "设备列表获取失败",
+          icon: "none"
+        })
+      })
+
+    }
+    deviceLoading.value = false
   })
 
   // 获取地块列表
@@ -160,7 +210,7 @@ function useDeviceList(userInfo) {
       blockId
     })
 
-    if (Array.isArray(!res.records)) {
+    if (!Array.isArray(res.records)) {
       return
     }
 
@@ -168,26 +218,69 @@ function useDeviceList(userInfo) {
     deviceData.list = res.records
   }
 
+  async function blockInit() {
+    if (blockLoading.value) {
+      console.log("getBlockList 加载中")
+      return
+    }
+    blockLoading.value = true
+    try {
+      await getBlockList()
+    } catch (error) {
+      console.error(error)
+      setTimeout(() => {
+        uni.showToast({
+          title: "地块列表获取失败",
+          icon: "none"
+        })
+      })
+
+    }
+
+    blockLoading.value = false
+  }
+
   return {
+    deviceListLoading,
     blockItem,
     deviceID,
     blockData,
     deviceData,
-    getBlockList
+    blockInit
   }
 }
 
 // 设备信息
 function useDeviceInfo(deviceID) {
+  const deviceInfoLoading = ref(false)
   const monitorList = ref([])
   const controlList = ref([])
 
-  watch(deviceID, () => {
-    getDeviceInfo()
+  watch(deviceID, async () => {
+    deviceInfoLoading.value = true
+    try {
+      await getDeviceInfo()
+    } catch (error) {
+      console.error(error)
+      setTimeout(() => {
+        uni.showToast({
+          title: "设备信息获取失败",
+          icon: "none"
+        })
+      })
+
+    }
+    deviceInfoLoading.value = false
   })
 
   // 获取设备信息
   async function getDeviceInfo() {
+    monitorList.value = []
+    controlList.value = []
+    if (!deviceID.value) {
+      return
+    }
+
     const res = await homeApi.getDeviceInfo({
       deviceId: deviceID.value
     })
@@ -202,6 +295,7 @@ function useDeviceInfo(deviceID) {
   }
 
   return {
+    deviceInfoLoading,
     monitorList,
     controlList
   }
@@ -230,7 +324,18 @@ function useDeviceInfo(deviceID) {
       width: 100%;
       display: flex;
       flex-flow: row wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
+    }
+
+    &-item {
+      width: 222rpx;
+      height: 126rpx;
+      margin: 10rpx 22rpx 10rpx 0;
+      overflow: hidden;
+    }
+
+    &-item:nth-child(3n+3) {
+      margin-right: 0px;
     }
   }
 

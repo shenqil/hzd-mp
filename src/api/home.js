@@ -1,4 +1,4 @@
-import { apiServer, apiServer2,apiServer3 } from "@/http/index";
+import { apiServer, apiServer2, apiServer3 } from "@/http/index";
 
 // 获取地块
 async function getBlockList(params = {}) {
@@ -20,15 +20,21 @@ async function getDeviceList(params = {}) {
 
 // 查询设备信息
 async function getDeviceInfo(params = {}) {
-  return await apiServer3.get("/hzdData/getCurrentDataByDeviceId",
-   {
-	   params: params
-   }
-  );
+  return await apiServer3.get("/hzdData/getCurrentDataByDeviceId", {
+    ...params,
+  });
+}
+
+// 控制继电器
+async function setRelay(params = {}) {
+  return await apiServer2.post("/relay", {
+    ...params
+  })
 }
 
 export default {
   getBlockList,
   getDeviceList,
-  getDeviceInfo
+  getDeviceInfo,
+  setRelay
 };

@@ -16,7 +16,7 @@ export class HttpServer {
     return new Promise((resolve, reject) => {
       const _options = {
         header: {
-          "content-type": !isFromData?  "application/json":'application/x-www-form-urlencoded',
+          "content-type": !isFromData ? "application/json" : 'application/x-www-form-urlencoded',
         },
         ...this.defaultOptions,
         ...options,
@@ -36,6 +36,10 @@ export class HttpServer {
         },
         ..._options,
         success: (res) => {
+          if (res.statusCode != 200) {
+            reject(res.statusCode)
+            return
+          }
           resolve(res.data);
         },
         fail: (res) => {
@@ -50,13 +54,13 @@ export class HttpServer {
       ...options,
     });
   }
-  
-  postFromData(url, params = {}, options = {}){
-	  return this.get(url, params, {
-		method: "POST",
-		...options,
-		 
-	  }, true);
+
+  postFromData(url, params = {}, options = {}) {
+    return this.get(url, params, {
+      method: "POST",
+      ...options,
+
+    }, true);
   }
 }
 

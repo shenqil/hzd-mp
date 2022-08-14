@@ -1,39 +1,90 @@
 <template>
     <view class="control-element">
         <view class="control-element_name">
-            {{ elementData.ename || '' }}
+            {{ elementData.ename || "" }}
         </view>
 
         <view class="control-element_el">
-            <switch :checked="elementData.evalue" color="#12CE66" style="transform:scale(0.5)" />
+            <switch :checked="checke" color="#12CE66" style="transform: scale(0.5)" @change="handleChange" />
         </view>
     </view>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed, toRefs, nextTick } from "vue";
+import homeApi from "@/api/home";
 
 export default defineComponent({
     props: {
-        blockName: {
-            type: String,
-            default: ''
+        deviceID: {
+            type: String || Number,
+            default: "",
         },
         elementData: {
             type: Object,
             default: () => ({
-                datetime: '',
-                ekey: '',
-                ename: '',
-                enum: '',
-                evalue: ''
-            })
-        }
+                datetime: "",
+                ekey: "",
+                ename: "",
+                enum: "",
+                evalue: 0,
+            }),
+        },
     },
-    setup() {
+    setup(props) {
+        const { deviceID, elementData } = toRefs(props);
+        const checke = computed({
+            set(v) {
+                elementData.value.evalue = v ? 1 : 0
+            },
+            get() {
+                return elementData.value.evalue === 1 ? true : false
+            }
+        })
 
-    }
-})
+        async function handleChange({ detail }) {
+
+            const state = detail.value ? 1 : 0
+            elementData.value.evalue = state
+            uni.showLoading({
+                title: "操作中..."
+            });
+            try {
+                const res = await setRelay(state)
+                // if (!res) {
+                //     throw new Error("操作失败")
+                // }
+            } catch (error) {
+                setTimeout(() => {
+                    uni.showToast({
+                        title: "操作失败",
+                        icon: "none"
+                    })
+                });
+                console.error(error)
+
+                nextTick(() => {
+                    elementData.value.evalue = detail.value ? 0 : 1
+                })
+            }
+
+            uni.hideLoading()
+        }
+
+        async function setRelay(state) {
+            await homeApi.setRelay({
+                deviceId: deviceID.value,
+                relayNum: elementData.value.enum,
+                relayState: state,
+            });
+        }
+
+        return {
+            checke,
+            handleChange,
+        };
+    },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -41,7 +92,7 @@ export default defineComponent({
     width: 100%;
     box-sizing: border-box;
     height: 146rpx;
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 0px 8rpx 15rpx 0px rgba(6, 125, 255, 0.1);
     border-radius: 8rpx;
     margin-bottom: 30rpx;
