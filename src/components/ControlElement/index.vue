@@ -17,8 +17,8 @@ import homeApi from "@/api/home";
 export default defineComponent({
     props: {
         deviceID: {
-            type: String || Number,
-            default: "",
+            type: Number,
+            default: 0,
         },
         elementData: {
             type: Object,
@@ -74,7 +74,7 @@ export default defineComponent({
         async function setRelay(state) {
             await homeApi.setRelay({
                 deviceId: deviceID.value,
-                relayNum: elementData.value.enum,
+                relayNum: Number(elementData.value.enum),
                 relayState: state,
             });
         }

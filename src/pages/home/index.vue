@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref, reactive, computed, watch } from "vue";
+import { defineComponent, ref, reactive, computed, watch, onUnmounted } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
@@ -75,6 +75,7 @@ export default defineComponent({
   setup() {
     const store = useStore()
     const userInfo = computed(() => store.getters['user/userInfo'])
+    const isLogin = computed(() => store.getters["user/isLogin"]);
 
     const { deviceID, blockData, deviceData, deviceListLoading, blockInit } = useDeviceList(userInfo)
     const { monitorList, controlList, deviceInfoLoading } = useDeviceInfo(deviceID)
@@ -87,6 +88,12 @@ export default defineComponent({
       return false
     })
 
+    watch(isLogin, (v) => {
+      if (v) {
+        blockInit()
+      }
+    }, { immediate: true })
+
     watch(loading, (v) => {
       if (v) {
         uni.showLoading({
@@ -97,8 +104,10 @@ export default defineComponent({
       }
     })
 
-    onMounted(() => {
-      blockInit()
+    onUnmounted(() => {
+      if (loading.value) {
+        uni.hideLoading()
+      }
     })
 
     return {
