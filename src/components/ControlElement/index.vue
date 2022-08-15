@@ -51,9 +51,9 @@ export default defineComponent({
             });
             try {
                 const res = await setRelay(state)
-                // if (!res) {
-                //     throw new Error("操作失败")
-                // }
+                if (!res) {
+                    throw new Error("操作失败")
+                }
             } catch (error) {
                 setTimeout(() => {
                     uni.showToast({

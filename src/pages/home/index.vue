@@ -44,18 +44,16 @@
         <ModuleName :name="'待办信息'" />
       </view>
       <view class="home_info-list">
-        <InfoElement />
-        <InfoElement />
-        <InfoElement />
-        <InfoElement />
-        <InfoElement />
+        <view class="home_info-item" v-for="item in infoList" :key="item.id" @click="handelClickInfo(item)">
+          <InfoElement :elementData="item" />
+        </view>
       </view>
     </view>
   </view>
 </template>
 
-<script>
-import { defineComponent, ref, reactive, computed, watch, onUnmounted } from "vue";
+<script lang="ts">
+import { defineComponent, ref, reactive, computed, watch, onUnmounted, toRaw } from "vue";
 import ModuleName from '@/components/ModuleName/index.vue'
 import MonitorElement from '@/components/MonitorElement/index.vue'
 import ControlElement from '@/components/ControlElement/index.vue'
@@ -79,9 +77,10 @@ export default defineComponent({
 
     const { deviceID, blockData, deviceData, deviceListLoading, blockInit } = useDeviceList(userInfo)
     const { monitorList, controlList, deviceInfoLoading } = useDeviceInfo(deviceID)
+    const { infoLoading, infoList, initTodoInfo, handelClickInfo } = useTodoInfo(userInfo)
 
     const loading = computed(() => {
-      if (deviceListLoading.value || deviceInfoLoading.value) {
+      if (deviceListLoading.value || deviceInfoLoading.value || infoLoading.value) {
         return true
       }
 
@@ -91,6 +90,7 @@ export default defineComponent({
     watch(isLogin, (v) => {
       if (v) {
         blockInit()
+        initTodoInfo()
       }
     }, { immediate: true })
 
@@ -115,7 +115,9 @@ export default defineComponent({
       blockData,
       deviceData,
       monitorList,
-      controlList
+      controlList,
+      infoList,
+      handelClickInfo
     }
   }
 })
@@ -307,6 +309,137 @@ function useDeviceInfo(deviceID) {
     deviceInfoLoading,
     monitorList,
     controlList
+  }
+}
+
+// 待办信息
+function useTodoInfo(userInfo) {
+  const infoLoading = ref(false)
+  const infoList = ref([])
+
+  function transformData(item) {
+    const typeMap = {
+      '1': 'event',
+      '2': 'warning'
+    }
+    const message = `${item.message}`
+    const [content, time] = message.split('，时间')
+    return {
+      type: typeMap[item.type] || '',
+      content: content || '',
+      discoverer: '文化人',
+      time: time || '',
+      name: '报告人',
+      contentName: `${item.type == 2 ? '告警' : '事件'}内容`,
+      id: item.id || ''
+    }
+  }
+
+  async function getMessages() {
+    infoList.value = []
+    const res = await homeApi.getMessages(userInfo.value.id)
+
+    if (!Array.isArray(res.obj)) {
+      return
+    }
+
+    infoList.value = res.obj.map(item => transformData(item))
+  }
+
+  async function initTodoInfo() {
+    if (infoLoading.value) {
+      return
+    }
+
+    infoLoading.value = true
+    try {
+      await getMessages()
+    } catch (error) {
+      console.error(error)
+      setTimeout(() => {
+        uni.showToast({
+          title: "待办信息失败",
+          icon: "none"
+        })
+      })
+    }
+
+    infoLoading.value = false
+  }
+
+  function handelClickInfo(item) {
+    if (item.type === 'event') {
+      eventDetails(item.id)
+    } else {
+      warnDetails(item.id)
+    }
+  }
+
+  async function eventDetails(id) {
+    if (infoLoading.value) {
+      return
+    }
+    infoLoading.value = true
+    try {
+      const { obj } = await homeApi.getEventReport(id)
+      if (!obj) {
+        throw "返回数据格式错误"
+      }
+      console.log(obj, 'event')
+      const textObj = {
+        describe: obj.describe,
+        eventTypeName: obj.eventType,
+        photo: obj.photo,
+        handleMenber: obj.handleMenber,
+        remark: obj.remark,
+        ...obj
+      }
+
+      uni.navigateTo({
+        url: `/pages/control/eventDetails?textObj=${JSON.stringify(textObj)}`
+      })
+    } catch (error) {
+      console.error(error)
+    }
+
+    infoLoading.value = false
+  }
+
+  async function warnDetails(id) {
+    if (infoLoading.value) {
+      return
+    }
+    infoLoading.value = true
+    try {
+      const { obj } = await homeApi.getWarnReport(id)
+      if (!obj) {
+        throw "返回数据格式错误"
+      }
+      console.log(obj, 'warn')
+      const textObj = {
+        describe: obj.describe,
+        eventTypeName: obj.eventType,
+        photo: obj.photo,
+        handleMenber: obj.handleMenber,
+        remark: obj.remark,
+        ...obj
+      }
+
+      uni.navigateTo({
+        url: `/pages/control/eventDetails?textObj=${JSON.stringify(textObj)}`
+      })
+    } catch (error) {
+      console.error(error)
+    }
+
+    infoLoading.value = false
+  }
+
+  return {
+    infoLoading,
+    initTodoInfo,
+    infoList,
+    handelClickInfo
   }
 }
 </script>

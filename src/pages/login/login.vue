@@ -17,7 +17,7 @@
 			<button type="primary" @click="login(0)">登录</button>
 		</div>
 		<div class="login_checkbox">
-			<button type="default" open-type="getUserInfo" @getuserinfo="wxLogin" @click="login(1)">微信一键登录</button>
+			<button type="default" open-type="getPhoneNumber" @getphonenumber="wxLogin" >微信一键登录</button>
 		</div>
 	</view>
 </template>
@@ -89,15 +89,16 @@ export default defineComponent({
 		}
 		
 		// 微信一键登录
-		const wxLogin = ()=>{
+		const wxLogin = ({ detail })=>{
+			console.log(detail)
 			uni.login({
 				provider:"weixin",
 				success:(res)=>{
-					console.log(res);
-					// 获取微信登录的授权码
-					var code = res.code
-					//在写发送request请求，
-					uni.request({})
+					console.log(res,'weixin');
+					// // 获取微信登录的授权码
+					// var code = res.code
+					// //在写发送request请求，
+					// uni.request({})
 				}
 			})
 		}

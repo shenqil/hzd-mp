@@ -1,5 +1,5 @@
 <template>
-	<view class="eventDetails">
+	<view v-if="!!dataDetails" class="eventDetails">
 		<ContentLine :leftContent="'事件类型'" :rightContent="dataDetails.eventTypeName" />
 		<div class="eventDetails_describe">
 			<div class="describe_title">事件描述</div>

@@ -28,13 +28,43 @@ async function getDeviceInfo(params = {}) {
 // 控制继电器
 async function setRelay(params = {}) {
   return await apiServer2.post("/relay", {
-    ...params
-  })
+    ...params,
+  });
+}
+
+// 获取待办信息
+async function getMessages(id = "") {
+  return await apiServer.get(`/npEventReport/getMessages/${id}`, {
+    header: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+  });
+}
+
+// 事件
+async function getEventReport(id = "") {
+  return await apiServer.get(`/npEventReport/getById/${id}`, {
+    header: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+  });
+}
+
+// 预警
+async function getWarnReport(id = "") {
+  return await apiServer.get(`/npEventReport/getWarnInfoById/${id}`, {
+    header: {
+      "content-type": "application/x-www-form-urlencoded",
+    },
+  });
 }
 
 export default {
   getBlockList,
   getDeviceList,
   getDeviceInfo,
-  setRelay
+  setRelay,
+  getMessages,
+  getEventReport,
+  getWarnReport,
 };

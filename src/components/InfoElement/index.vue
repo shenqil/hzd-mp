@@ -1,13 +1,13 @@
 <template>
     <view class="info-element" @click="handelClick">
         <view class="info-element_content">
-            {{elementData.contentName}}: {{ elementData.content }}
+            {{ elementData.contentName }}: {{ elementData.content }}
         </view>
 
         <view class="info-element_discoverer">
             <view class="info-element_discoverer-name">
                 <view class="info-element_discoverer-inner">
-                    {{elementData.name}}: {{ elementData.discoverer }}
+                    {{ elementData.name }}: {{ elementData.discoverer }}
                 </view>
             </view>
             <view class="info-element_discoverer-time">
@@ -15,7 +15,8 @@
             </view>
         </view>
 
-        <image class="info-element_type" v-if="!elementData.icont" :src="filterPNG(elementData.type)"></image>
+        <image class="info-element_type" v-if="!elementData.icont || elementData.type"
+            :src="filterPNG(elementData.type)"></image>
     </view>
 </template>
 
@@ -23,10 +24,6 @@
 import { defineComponent } from 'vue'
 import alarmStatus from './img/alarmStatus.png'
 import eventStatus from './img/eventStatus.png'
-import injuredState from './img/injuredState.png'
-import otherStatus from './img/otherStatus.png'
-import weatherStatus from './img/weatherStatus.png'
-import jobStatus from './img/jobStatus.png'
 
 export default defineComponent({
     props: {
@@ -37,28 +34,29 @@ export default defineComponent({
                 content: '第二地块监控设备异常',
                 discoverer: '文化人',
                 time: "14:00-15:20",
-				name: '处理人',
-				contentName: '告警内容',
-				id: null
+                name: '处理人',
+                contentName: '告警内容',
+                id: null
             })
         }
     },
     setup(props, context) {
         function filterPNG(type) {
             const map = {
-                event: eventStatus
+                event: eventStatus,
+                warning: alarmStatus,
             }
 
             return map[type] || eventStatus
         }
 
-		const handelClick = ()=>{
-			context.emit('handelClick',{ ...props.elementData })
-		}
-		
+        const handelClick = () => {
+            context.emit('handelClick', { ...props.elementData })
+        }
+
         return {
             filterPNG,
-			handelClick
+            handelClick
         }
     }
 })
@@ -126,6 +124,7 @@ export default defineComponent({
             font-weight: 400;
         }
     }
+
     &_type {
         position: absolute;
         width: 87rpx;
