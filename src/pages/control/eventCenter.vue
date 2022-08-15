@@ -109,9 +109,10 @@
 					url: '/pages/control/eventAdd'
 				})
 			},
-			eventDetails(){
+			eventDetails(item){
+				let textObj = JSON.stringify(item)
 				uni.navigateTo({
-					url: '/pages/control/eventDetails'
+					url: `/pages/control/eventDetails?textObj=${textObj}`
 				})
 			},
 			bindPickerChange(e){

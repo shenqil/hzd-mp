@@ -76,15 +76,12 @@
 			const index = ref(null)
 			const userIndex = ref(null)
 			const describe = ref(null)
-			const list = ref([])
 			const imgList = ref([])
 			const remark = ref(null)
 			const bindPickerChange = (e) => {
-				console.log('picker发送选择改变，携带值为', e.detail.value)
 				index.value = e.detail.value
 			}
 			const bindPickerChange1 = (e) => {
-				console.log('picker发送选择改变，携带值为', e.detail.value)
 				userIndex.value = e.detail.value
 			}
 			const addImg = (e) => {
@@ -183,7 +180,6 @@
 		const eventTypeList = ref([])
 		
 		const userList = ref([])
-		userList
 		// 获取筛选列表
 		async function getSelectList(){
 			

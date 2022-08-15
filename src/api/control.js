@@ -1,4 +1,4 @@
-import { apiServer, apiServer2,apiServer3 } from "@/http/index";
+import { apiServer, apiServer2,apiServer3, apiServer4} from "@/http/index";
 
 // 获取事件列表
 async function getEventList(params = {}) {
@@ -53,6 +53,18 @@ async function getEventReport(params = {}) {
   });
 }
 
+// 种植品种
+async function getplantType(params = {}) {
+  return await apiServer4.post(`/plantType/getPages`,
+  { 
+    pageNum: 1,
+    pageSize: 1000,
+	  ...params
+  });
+}
+
+
+
 export default {
 	getEventList,
 	getTaskList,
@@ -62,4 +74,5 @@ export default {
 	getxphUserList,
 	getsysDictList,
 	getEventReport,
+  getplantType
 }

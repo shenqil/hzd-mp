@@ -87,7 +87,7 @@
             "path" : "pages/control/plantingCenter",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "种植中心",
                 "enablePullDownRefresh": false
             }
             

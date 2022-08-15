@@ -22,7 +22,7 @@
 	    <ModuleName :name="'种植信息'" />
 	  </view>
 	  <view class="control_info_list">
-	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.itemText,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,...item}" :key="index"/>
+	    <InfoElement @handelClick="playtingDetails" v-for="(item,index) in playtingList" :elementData="{ content: item.plantingTypeName,discoverer: item.blockName, time: item.plantingTime,contentName:'种植类型',name:'所属地块',icont: 1,...item}" :key="index"/>
 	  </view>
 	</view>
 	<!-- 作业信息 -->

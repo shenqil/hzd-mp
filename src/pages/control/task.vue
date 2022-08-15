@@ -33,37 +33,136 @@
 		  ModuleName,
 		  InfoElement
 		},
-		setup() {
-			const array = ref(['A型架第一', 'B型架第一', 'C型架第一', 'D型架第一'])
-			const array1 = ref(['A型架第一', 'B型架第一', 'C型架第一监控设备', 'D型架第一'])
-			const index = ref(null)
-			const index1 = ref(null)
-			const bindPickerChange= (e)=>{
-				console.log('picker发送选择改变，携带值为', e.detail.value)
-				index.value = e.detail.value
+		data() {
+		    return {
+		      plantingTypeList: [],
+			  userList: [],
+			  index: null,
+			  userIndex: null,
+			  playtingList:[]
+		    }
+		  },
+		created(){
+			pageNum = 1 ;
+			this.playtingList = []
+			this.getPlantingList()
+			this.getSelectList()
+		},
+		onReachBottom() {
+			if(pageNum<pages){
+				pageNum++
+				this.getPlantingList()
 			}
 			
-			const bindPickerChange1= (e)=>{
-				console.log('picker发送选择改变，携带值为', e.detail.value)
-				index1.value = e.detail.value
-			}
+		},
+		onPullDownRefresh() {
+			pageNum = 1 ;
+			this.playtingList = []
+			this.getPlantingList()
 			
-			const handelClick = ()=>{
+		},
+		methods:{
+			// 获取筛选列表
+			async getSelectList(){
+				let params = {
+					
+				}
+				const res = await controlApi.getxphUserList({
+						  ...params
+				})
+				this.userList = res.obj.records
+				
+				const res1 = await controlApi.getsysDictList({
+						 dictCode: 'plantingType'
+				})
+				
+				this.plantingTypeList = res1.obj
+			},
+			// 获取事件列表
+			async getPlantingList(){
+				let params = {
+					pageNum: pageNum,
+					pageSize: pageSize,
+					param: {
+						blockId: this.userIndex !=null? this.userList[this.userIndex].id : null,
+						plantingType: this.index !=null? this.plantingTypeList[this.index].itemValue : null,
+					}
+				}
+				const res = await controlApi.getPlantingList({
+						  ...params
+				})
+				uni.stopPullDownRefresh();
+				if (!Array.isArray(res.obj.records)) {
+				   console.error("返回数据不存在")
+				   return
+				}
+				pages = res.obj.pages
+				this.playtingList = this.playtingList.concat(res.obj.records)
+				
+			},
+			handelAdd(){
 				uni.navigateTo({
-					url: '/pages/control/taskDetails'
+					url: '/pages/control/eventAdd'
+				})
+			},
+			eventDetails(item){
+				let textObj = JSON.stringify(item)
+				uni.navigateTo({
+					url: `/pages/control/eventDetails?textObj=${textObj}`
+				})
+			},
+			bindPickerChange(e){
+				console.log('picker发送选择改变，携带值为', e.detail.value)
+				this.index = e.detail.value;
+				pageNum = 1 ;
+				this.playtingList = []
+				this.getPlantingList()
+			},
+			bindPickerChange1(e){
+				console.log('picker发送选择改变，携带值为', e.detail.value)
+				this.userIndex = e.detail.value;
+				pageNum = 1 ;
+				this.playtingList = []
+				this.getPlantingList()
+			},
+			playtingDetails(item){
+				let textObj = JSON.stringify(item)
+				uni.navigateTo({
+					url: `/pages/control/plantingDetails?textObj=${textObj}`
 				})
 			}
+		},
+		// setup() {
+		// 	const array = ref(['A型架第一', 'B型架第一', 'C型架第一', 'D型架第一'])
+		// 	const array1 = ref(['A型架第一', 'B型架第一', 'C型架第一监控设备', 'D型架第一'])
+		// 	const index = ref(null)
+		// 	const index1 = ref(null)
+		// 	const bindPickerChange= (e)=>{
+		// 		console.log('picker发送选择改变，携带值为', e.detail.value)
+		// 		index.value = e.detail.value
+		// 	}
 			
-			return {
-				bindPickerChange,
-				array,
-				index,
-				array1,
-				index1,
-				bindPickerChange1,
-				handelClick
-			}
-		}
+		// 	const bindPickerChange1= (e)=>{
+		// 		console.log('picker发送选择改变，携带值为', e.detail.value)
+		// 		index1.value = e.detail.value
+		// 	}
+			
+		// 	const handelClick = ()=>{
+		// 		uni.navigateTo({
+		// 			url: '/pages/control/taskDetails'
+		// 		})
+		// 	}
+			
+		// 	return {
+		// 		bindPickerChange,
+		// 		array,
+		// 		index,
+		// 		array1,
+		// 		index1,
+		// 		bindPickerChange1,
+		// 		handelClick
+		// 	}
+		// }
 	})
 </script>
 

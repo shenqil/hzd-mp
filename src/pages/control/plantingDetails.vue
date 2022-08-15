@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<ContentLine leftContent="所属地块" :rightContent="dataDetails.blockName" />
-		<ContentLine leftContent="种植类型" :rightContent="dataDetails.itemText" />
+		<ContentLine leftContent="种植类型" :rightContent="dataDetails.plantingTypeName" />
 		<ContentLine leftContent="种植时间" :rightContent="dataDetails.plantingTime" />
 		<ContentLine leftContent="种植面积" :rightContent="dataDetails.plantingArea" />
 		<ContentLine leftContent="种植数量" :rightContent="dataDetails.plantingNum" />
@@ -18,8 +18,9 @@
 		components: {
 			ContentLine
 		},
-		onLoad(option){
+		onLoad(options){
 			parmes = JSON.parse(options.textObj)
+			console.log(parmes,23)
 		},
 		setup() {
 			const dataDetails = ref(null)
