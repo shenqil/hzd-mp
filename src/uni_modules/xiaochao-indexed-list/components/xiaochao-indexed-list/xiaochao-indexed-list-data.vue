@@ -16,8 +16,8 @@
 						
 						<image class="img" src="/static/ucenter/touxiang.png" mode=""></image>
 						<div class="right">
-							<div class="top">{{shua}}</div>
-							<div class="bottom">18072101345 &nbsp;&nbsp;&nbsp;职位：A块园艺师</div>
+							<div class="top">{{shua.createUserName}}</div>
+							<div class="bottom">{{shua.phone}} &nbsp;&nbsp;&nbsp;职位：{{shua.userTypeName}}</div>
 						</div>
 					</view>
 					

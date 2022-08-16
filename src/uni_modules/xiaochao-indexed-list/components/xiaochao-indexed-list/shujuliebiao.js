@@ -1,11 +1,288 @@
 export default {
 	obja: {
-		"A": ["安居小区", "奥德紫荆城", "奥正诚园", "奥德海棠", "奥德天玺", "澳海名苑", "奥德公寓"],
-		"B": ["滨河名邸", "碧桂园滨江学府", "滨河社区", "北王庄社区", "滨河花苑", "宝德和园", "博正慧园", "八湖花园小区", "八建小区", "滨城雅居", "滨城雅苑"],
-		"C": ["褚庄社区汇金苑小区", "城开东岸", "褚庄小区汇银苑", "长安花园", "褚庄小区汇宝苑", "褚庄小区汇财苑", "成开东岸", "陈家湖小区", "城市花园"],
-		"D": ["独树头佳园西北社区", "德馨园", "大义堂小区", "東方郡", "迪尚御园", "东华都市阳光", "东旭第一城", "东华花园", "东正颐锦园", "东兴花园", "独树头佳园东北社区", "独树头佳园东南社区", "东成小区", "东旭星河港湾", "东悦府"],
-		"F": ["府东花园", "福泰御河湾", "凤舞明珠", "风景嘉园", "凤凰家园", "凤翔小区", "府东家园", "凤仪社区", "房源印象东城", "凤鸣东岸", "福布斯湾"],
-		"G": ["格瑞斯小镇", "冠亚星城", "港湾新里程", "观唐温泉国际度假村", "巩村居委皇山富民小区", "官庄小区", "贵和锦上", "桂龙学府"],
+		"A": [
+			{
+				createUserName:"安居小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"奥德紫荆城",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"奥正诚园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"奥德海棠",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"奥德天玺",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"奥德公寓",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			}
+			
+		],
+		"B": [
+			{
+				createUserName:"滨河名邸",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"碧桂园滨江学府",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"滨河社区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"北王庄社区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"滨河花苑",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"宝德和园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"八湖花园小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"八建小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"滨城雅居",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"滨城雅苑",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			}
+		],
+		"C": [
+			{
+				createUserName:"褚庄社区汇金苑小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"城开东岸",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"褚庄小区汇银苑",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"长安花园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"褚庄小区汇宝苑",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"褚庄小区汇财苑",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"成开东岸",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"陈家湖小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"城市花园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			}
+		],
+		"D": [
+			{
+				createUserName:"独树头佳园西北社区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"德馨园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"大义堂小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"東方郡",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"迪尚御园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"东华都市阳光",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"东旭第一城",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"东华花园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"东正颐锦园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"东兴花园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"独树头佳园东北社区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+		],
+		"F": [
+			{
+				createUserName:"府东花园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"福泰御河湾",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"凤舞明珠",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"凤凰家园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"凤翔小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"府东家园",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"凤仪社区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"房源印象东城",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"凤鸣东岸",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"福布斯湾",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+		],
+		"G": [
+			{
+				createUserName:"格瑞斯小镇",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"冠亚星城",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"港湾新里程",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"观唐温泉国际度假村",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"巩村居委皇山富民小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"官庄小区",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"贵和锦上",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+			{
+				createUserName:"桂龙学府",
+				phone: '15342256121',
+				userTypeName: '超级管理员'
+			},
+		],
 		"H": ["恒大绿洲", "和谐家园", "皇山别墅", "慧谷领御", "和美苑花园", "皇山城", "皇山社区", "宏宸欧缘", "海博长安府", "皇山华府", "华信浅水湾", "慧谷小镇", "豪森华府", "恒田华府", "河苑小区", "海联江山里", "皇家艺墅", "环球和景", "河东区国税局家属院", "皇山小区", "河东区人民法院家属院", "和美大厦", "后宅店小区", "慧谷星岸", "海诺滨江", "花园小区"],
 		"J": ["集贤花园", "君悦兰亭", "九曲花园", "金榜龙城", "嘉隆花园", "金桂御景城", "佳和社区", "九曲党委家属院", "建设局家属院", "九龙口小区", "聚贤居", "金樾门第", "解湖小区", "君道蔚蓝海岸", "九建家属院", "九曲花园大区"],
 		"K": ["凯润滨湖花园", "科技鑫城", "空港物流城"],

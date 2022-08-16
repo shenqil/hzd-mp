@@ -6,12 +6,12 @@
 		    <ModuleName :name="'种植中心'" />
 			<div class="type">
 				<picker @change="bindPickerChange" :value="index" :range="plantingTypeList" :range-key="'plantTypeName'">
-					<view class="uni-input">{{index != null?plantingTypeList[index].itemText : '种植类型'}}  <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+					<view class="uni-input">{{index != null?plantingTypeList[index].plantTypeName : '种植类型'}}  <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<div class="massif">
-				<picker @change="bindPickerChange1" :value="userIndex" :range="userList">
-					<view class="uni-input">{{userList[userIndex] || '所属地块'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+				<picker @change="bindPickerChange1" :value="BlockIndex" :range="BlockList" :range-key="'blockName'">
+					<view class="uni-input">{{BlockIndex!=null?BlockList[BlockIndex].blockName : '所属地块'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<view class="planting_info_list">
@@ -40,9 +40,9 @@
 		data() {
 		    return {
 		      plantingTypeList: [],
-			  userList: [],
+			  BlockList: [],
 			  index: null,
-			  userIndex: null,
+			  BlockIndex: null,
 			  playtingList:[]
 		    }
 		  },
@@ -71,10 +71,10 @@
 				let params = {
 					
 				}
-				const res = await controlApi.getxphUserList({
+				const res = await controlApi.getBlockList({
 						  ...params
 				})
-				this.userList = res.obj.records
+				this.BlockList = res.obj.records
 				
 				const res1 = await controlApi.getplantType({
 						 ...params
@@ -88,8 +88,8 @@
 					pageNum: pageNum,
 					pageSize: pageSize,
 					param: {
-						blockId: this.userIndex !=null? this.userList[this.userIndex].id : null,
-						plantingType: this.index !=null? this.plantingTypeList[this.index].itemValue : null,
+						blockId: this.BlockIndex !=null? this.BlockList[this.BlockIndex].id : null,
+						plantingType: this.index !=null? this.plantingTypeList[this.index].id : null,
 					}
 				}
 				const res = await controlApi.getPlantingList({
@@ -124,7 +124,7 @@
 			},
 			bindPickerChange1(e){
 				console.log('picker发送选择改变，携带值为', e.detail.value)
-				this.userIndex = e.detail.value;
+				this.BlockIndex = e.detail.value;
 				pageNum = 1 ;
 				this.playtingList = []
 				this.getPlantingList()

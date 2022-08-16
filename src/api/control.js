@@ -1,4 +1,4 @@
-import { apiServer, apiServer2,apiServer3, apiServer4} from "@/http/index";
+import { apiServer, apiServer2,apiServer3, apiServer4, apiServer5} from "@/http/index";
 
 // 获取事件列表
 async function getEventList(params = {}) {
@@ -62,9 +62,23 @@ async function getplantType(params = {}) {
 	  ...params
   });
 }
+// 获取设备列表
+async function getDevicepage(params = {}) {
+  return await apiServer5.get(`/devicepage`, { ...params });
+}
 
+// 获取视频
+async function getVideo(params = {}) {
+  return await apiServer5.get(`/video/${params}`,);
+}
 
-
+// 获取照片
+async function getPhoto(params = {}) {
+  return await apiServer5.get(`/photo/${params.facId}`, 
+  {
+	  ...params
+  });
+}
 export default {
 	getEventList,
 	getTaskList,
@@ -74,5 +88,8 @@ export default {
 	getxphUserList,
 	getsysDictList,
 	getEventReport,
-  getplantType
+    getplantType,
+    getDevicepage,
+	getVideo,
+	getPhoto
 }

@@ -5,17 +5,17 @@
 		  <view class="planting_event_name">
 		    <ModuleName :name="'作业中心'" />
 			<div class="type">
-				<picker @change="bindPickerChange" :value="index" :range="array">
-					<view class="uni-input">{{array[index] || '作业类型'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+				<picker @change="bindPickerChange" :value="index" :range="taskTypeList" :range-key="'itemText'">
+					<view class="uni-input">{{index!=null?taskTypeList[index].itemText : '作业类型'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<div class="massif">
-				<picker @change="bindPickerChange1" :value="index1" :range="array1">
-					<view class="uni-input">{{array1[index1] || '所属地块'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
+				<picker @change="bindPickerChange1" :value="BlockIndex" :range="BlockList" :range-key="'blockName'">
+					<view class="uni-input">{{BlockIndex!=null?BlockList[BlockIndex].blockName : '所属地块'}} <image class="xia" src="../../static/control/xia.png" mode=""></image> </view>
 				</picker>
 			</div>
 			<view class="planting_info_list">
-			  <InfoElement @handelClick="handelClick" v-for="(item,index) in 5 " :key="index" />
+			  <InfoElement @handelClick="taskDetails" v-for="(item,index) in taskList" :elementData="{ content: item.farmingTypeName,discoverer: item.farmingMenberName, time: item.farmingTime,contentName:'作业信息',name:'作业人',icont: 1,...item}" :key="index"/>
 			  
 			</view>
 		  </view>
@@ -26,8 +26,12 @@
 
 <script>
     import { defineComponent, ref } from 'vue'
+	import controlApi from '@/api/control';
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import InfoElement from '@/components/InfoElement/index.vue';
+	let pageNum = 1;
+	let pageSize = 10;
+	let pages = 0;
 	export default defineComponent({
 		components: {
 		  ModuleName,
@@ -35,30 +39,30 @@
 		},
 		data() {
 		    return {
-		      plantingTypeList: [],
-			  userList: [],
+		      taskTypeList: [],
+			  BlockList: [],
 			  index: null,
-			  userIndex: null,
-			  playtingList:[]
+			  BlockIndex: null,
+			  taskList:[]
 		    }
 		  },
 		created(){
 			pageNum = 1 ;
-			this.playtingList = []
-			this.getPlantingList()
+			this.taskList = []
+			this.getTaskList()
 			this.getSelectList()
 		},
 		onReachBottom() {
 			if(pageNum<pages){
 				pageNum++
-				this.getPlantingList()
+				this.getTaskList()
 			}
 			
 		},
 		onPullDownRefresh() {
 			pageNum = 1 ;
-			this.playtingList = []
-			this.getPlantingList()
+			this.taskList = []
+			this.getTaskList()
 			
 		},
 		methods:{
@@ -67,28 +71,28 @@
 				let params = {
 					
 				}
-				const res = await controlApi.getxphUserList({
+				const res = await controlApi.getBlockList({
 						  ...params
 				})
-				this.userList = res.obj.records
+				this.BlockList = res.obj.records
 				
 				const res1 = await controlApi.getsysDictList({
-						 dictCode: 'plantingType'
+						 dictCode: 'farmingType'
 				})
 				
-				this.plantingTypeList = res1.obj
+				this.taskTypeList = res1.obj
 			},
 			// 获取事件列表
-			async getPlantingList(){
+			async getTaskList(){
 				let params = {
 					pageNum: pageNum,
 					pageSize: pageSize,
 					param: {
-						blockId: this.userIndex !=null? this.userList[this.userIndex].id : null,
-						plantingType: this.index !=null? this.plantingTypeList[this.index].itemValue : null,
+						blockId: this.BlockIndex !=null? this.BlockList[this.BlockIndex].id : null,
+						farmingType: this.index !=null? this.taskTypeList[this.index].itemValue : null,
 					}
 				}
-				const res = await controlApi.getPlantingList({
+				const res = await controlApi.getTaskList({
 						  ...params
 				})
 				uni.stopPullDownRefresh();
@@ -97,7 +101,7 @@
 				   return
 				}
 				pages = res.obj.pages
-				this.playtingList = this.playtingList.concat(res.obj.records)
+				this.taskList = this.taskList.concat(res.obj.records)
 				
 			},
 			handelAdd(){
@@ -115,20 +119,20 @@
 				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.index = e.detail.value;
 				pageNum = 1 ;
-				this.playtingList = []
-				this.getPlantingList()
+				this.taskList = []
+				this.getTaskList()
 			},
 			bindPickerChange1(e){
 				console.log('picker发送选择改变，携带值为', e.detail.value)
-				this.userIndex = e.detail.value;
+				this.BlockIndex = e.detail.value;
 				pageNum = 1 ;
-				this.playtingList = []
-				this.getPlantingList()
+				this.taskList = []
+				this.getTaskList()
 			},
-			playtingDetails(item){
+			taskDetails(item){
 				let textObj = JSON.stringify(item)
 				uni.navigateTo({
-					url: `/pages/control/plantingDetails?textObj=${textObj}`
+					url: `/pages/control/taskDetails?textObj=${textObj}`
 				})
 			}
 		},
