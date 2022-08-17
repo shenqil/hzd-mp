@@ -1,73 +1,89 @@
 <template>
-	<xiaochao-indexed-list :quanbushuju="shuju" @click="bindClick"></xiaochao-indexed-list>
+  <xiaochao-indexed-list
+    :quanbushuju="userList"
+    @click="bindClick"
+  ></xiaochao-indexed-list>
 </template>
 
 <script>
-	import { defineComponent, ref, onMounted } from 'vue'
-	import vPinyin from './txl/vue-py'
-	//引入的演示数据，替换自己的后可以删除组件目录下 shujuliebiao.js文件
-	import obj from "@/uni_modules/xiaochao-indexed-list/components/xiaochao-indexed-list/shujuliebiao.js";
-	let salesmanName ='zhangsan'
-	// #调用汉字转拼音方法
-	let namePinyin = vPinyin.chineseToPinYin(salesmanName)
-	console.log(namePinyin,13)
+import { defineComponent, ref, onMounted } from "vue";
+import vPinyin from "./txl/vue-py";
+import controlApi from "@/api/control";
+export default defineComponent({
+  setup() {
+    const bindClick = (e) => {
+    //   uni.showToast({
+    //     title: e.linshi.username,
+    //   });
+    };
+    const userList = ref();
+    async function getxphUserList() {
+      let res = await controlApi.getxphUserList({
+        pageNum: 1,
+        pageSize: 10000,
+      });
+      let resData = res.obj.records;
+      
+	  let dataObj = init(resData);
+	  userList.value = sortData(dataObj)
 	
-	export default defineComponent({
-		setup() {
-			const shuju = ref(obj.obja);
-			console.log(shuju,12)
-			const bindClick = (e)=>{
-				uni.showToast({
-					title: e.linshi,
-				});
-			}
-			// 格式化数据
-			const getCountryList = (resData)=>{
-				let res = resData;
-				this.shortcut=[];
-				// 格式化数据
-				var map = {};
-				res.forEach((item, index) => {
-				var key = item.orgCode.slice(0, 1);
-				if (!map[key]) {
-					this.shortcut.push(key)
-					map[key] = {
-					title: key,
-					items: []
-					}
-				}
-				map[key].items.push(item);
-				})
-				// 转为数组
-				var ret = [];
-				for (var k in map) {
-				var val = map[k];
-				ret.push(val);
-				}
-				// 排序
-				ret.sort((a, b)=>{
-				return a.title.charCodeAt(0) - b.title.charCodeAt(0);
-				});
-				this.shortcut.sort((a, b) =>{
-				return a.charCodeAt(0) - b.charCodeAt(0);
-				});
-				shuju.value = ret;
-			// })
-			}
+    }
+	// 初始化数据
+    const init = (resData) => {
+	  let listData = {};
+      if (resData.length !== 0) {
+        var salesmanMap = new Map();
+        resData.forEach((item, index) => {
+          let salesmanName = item.username;
+          let firstPinyin = "";
+          if (salesmanName !== "") {
+            //获取汉字拼音首字母
+            let namePinyin = vPinyin.chineseToPinYin(
+              salesmanName.substring(0, 1)
+            );
+            firstPinyin = namePinyin.substring(0, 1).toUpperCase();
+          }
+          let salesmanData = [];
+          //  构造key为业务员名字首字母 value为业务员工列表的map对象
+          if (salesmanMap.has(firstPinyin)) {
+            salesmanData = salesmanMap.get(firstPinyin);
+            salesmanData.push(item);
+            salesmanMap.set(firstPinyin, salesmanData);
+          } else {
+            salesmanData.push(item);
+            salesmanMap.set(firstPinyin, salesmanData);
+          }
+        });
+        //  构造name：业务员名字首字母  value:业务员工列表数据 json对象数组
+        for (let [key, value] of salesmanMap.entries()) {
+          var jsonData = {};
+          jsonData[key] = value;
+          listData = { ...jsonData, ...listData };
+        }
+      }
+      return listData;
+    };
+    // 字母排序
+    const sortData = (listData) => {
+      let obj = {};
+      for (let i = 65; i <= 90; i++) {
+        if (listData[String.fromCharCode(i)]) {
+          obj[String.fromCharCode(i)] = listData[String.fromCharCode(i)];
+        }
+      }
+      return obj
+    };
 
-			onMounted(()=>{
-				let list = []
-				// getCountryList(list)
-			})
-			return {
-				shuju,
-				bindClick
-			}
-		}
-		
-	})
+    onMounted(() => {
+      getxphUserList();
+    });
+    return {
+      bindClick,
+      userList
+    };
+  },
+});
 </script>
 
 <style>
-
 </style>

@@ -16,8 +16,11 @@
 						
 						<image class="img" src="/static/ucenter/touxiang.png" mode=""></image>
 						<div class="right">
-							<div class="top">{{shua.createUserName}}</div>
-							<div class="bottom">{{shua.phone}} &nbsp;&nbsp;&nbsp;职位：{{shua.userTypeName}}</div>
+							<div class="top">{{shua.username}}</div>
+							<div class="bottom">
+								<span class="lab">{{shua.phone || '--'}}</span>
+								<span class="lab">职位：{{shua.userTypeName}}</span>
+							</div>
 						</div>
 					</view>
 					
@@ -109,6 +112,10 @@
 			}
 			.bottom{
 				line-height: 60rpx;
+				display: flex;
+				.lab{
+					width: 50%;
+				}
 			}
 		}
 	}
