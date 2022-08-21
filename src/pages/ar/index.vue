@@ -1,6 +1,6 @@
 <template>
   <view class="camera">
-    <camera v-show="!isScanned" device-position="back" flash="off" @error="error"
+    <camera v-show="!isScanned" device-position="back" flash="off" @error="error" @initdone="initdone"
       class="camera_content"></camera>
     <image v-show="isScanned" class="camera_content" :src="scanInfo.photo"></image>
 
@@ -25,9 +25,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, markRaw, nextTick } from "vue";
+import { defineComponent, ref, reactive, markRaw, nextTick, computed, watch } from "vue";
 import { onShow, onHide } from "@dcloudio/uni-app";
-// import upng from 'upng-js'
 let num = 0;
 
 export default defineComponent({
@@ -56,6 +55,25 @@ export default defineComponent({
          与此同时，草莓还可以巩固齿龈，清新口气，润泽喉部。",
       photo: "",
     });
+    const isStartTask = computed(()=>{
+      return isShow.value && isInitdone.value
+    })
+
+    watch(isStartTask,()=>{
+      nextTick(() => {
+        if (cameraListener.value) {
+          cameraListener.value.start();
+        } else {
+          startTacking();
+        }
+
+        if (!isScanned.value) {
+          reScanHandle();
+        }
+      });
+    },{
+      immediate:true
+    })
 
     function reScanHandle() {
       isScanned.value = false;
@@ -113,7 +131,6 @@ export default defineComponent({
       }
       cameraListener.value = markRaw(
         context.onCameraFrame(async function (res) {
-          isInitdone.value = true
           if (isScanned.value || !isShow.value) {
             return;
           }
@@ -195,16 +212,10 @@ export default defineComponent({
       });
     }
 
-    // async function toB642() {
-    //   const frame = cameraData.value
-    //   if (!frame) {
-    //     return ''
-    //   }
-
-    //   let pngData = upng.encode([frame.data], frame.width, frame.height)
-    //   let base64 = uni.arrayBufferToBase64(pngData)
-    //   return "data:image/png;base64," + base64
-    // }
+    function initdone({ detail }) {
+      console.log(detail)
+      isInitdone.value = true
+    }
 
     function error(e) {
       console.error(e);
@@ -212,17 +223,6 @@ export default defineComponent({
 
     onShow(() => {
       isShow.value = true;
-      nextTick(() => {
-        if (cameraListener.value) {
-          cameraListener.value.start();
-        } else {
-          startTacking();
-        }
-
-        if (!isScanned.value) {
-          reScanHandle();
-        }
-      });
       console.log("AR Show");
     });
     onHide(() => {
@@ -234,6 +234,7 @@ export default defineComponent({
     });
     return {
       isInitdone,
+      initdone,
       isScanned,
       scanInfo,
       canvasStyle,
@@ -266,7 +267,7 @@ export default defineComponent({
   }
 
   &_scaning {
-    z-index: 10;
+    z-index: 1000;
     width: 500rpx;
     height: 500rpx;
     position: absolute;
@@ -278,6 +279,7 @@ export default defineComponent({
     background-size: cover;
 
     &-img {
+      z-index: 1001;
       width: 500rpx;
       position: absolute;
       top: 0;
