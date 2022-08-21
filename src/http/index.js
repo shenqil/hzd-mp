@@ -64,10 +64,10 @@ export class HttpServer {
   }
 }
 
-export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300/base/");
-export const apiServer2 = new HttpServer("https://jxdd.hzdny.cn:44300/xph/");
-export const apiServer3 = new HttpServer("https://jxdd.hzdny.cn:44300/datacenter/");
-export const apiServer4 = new HttpServer("https://jxdd.hzdny.cn:44300/plant/");
-export const apiServer5 = new HttpServer("https://jxdd.hzdny.cn:44300/xph/");
+export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300/base");
+export const apiServer2 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
+export const apiServer3 = new HttpServer("https://jxdd.hzdny.cn:44300/datacenter");
+export const apiServer4 = new HttpServer("https://jxdd.hzdny.cn:44300/plant");
+export const apiServer5 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
 
 export default apiServer;
