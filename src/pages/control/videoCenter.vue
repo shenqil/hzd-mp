@@ -18,11 +18,11 @@
 		  </view>
 		  <div class="video_handle">
 			  <div class="handle_box">
-				  <image class="handle_top sub" mode="" src="../../static/control/shang.png"></image>
-				  <image class="handle_right sub" mode="" src="../../static/control/you.png"></image>
-				  <image class="handle_bottom sub" mode="" src="../../static/control/xia.png"></image>
-				  <image class="handle_left sub" mode="" src="../../static/control/zuo.png"></image>
-				  <image class="handle_center sub" mode="" src="../../static/control/xiangji.png"></image>
+				  <image class="handle_top sub" @touchstart="handelDown(0)" @touchend="handelUp" mode="" src="../../static/control/shang.png"></image>
+				  <image class="handle_right sub" @touchstart="handelDown(3)" @touchend="handelUp" mode="" src="../../static/control/you.png"></image>
+				  <image class="handle_bottom sub" @touchstart="handelDown(1)" @touchend="handelUp" mode="" src="../../static/control/xia.png"></image>
+				  <image class="handle_left sub" @touchstart="handelDown(2)" @touchend="handelUp" mode="" src="../../static/control/zuo.png"></image>
+				  <image class="handle_center sub" @click="handelPhoto" mode="" src="../../static/control/xiangji.png"></image>
 			  </div>
 		  </div>
 		</view>
@@ -43,7 +43,9 @@
 	import store from "@/store/index";
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import imgTab from '@/components/imgTab/imgTab.vue'
-	let facId = null
+	let facId = null;
+	let channel = null;
+	let accessToken = null;
 	export default defineComponent({
 		components:{
 			ModuleName,
@@ -56,7 +58,9 @@
 			
 			const bindPickerChange = (e)=>{
 				index.value = e.detail.value
-			    facId = selectList.value[e.detail.value].facId
+			    facId = selectList.value[e.detail.value].facId;
+				channel = selectList.value[e.detail.value].channel || null;
+				accessToken = selectList.value[e.detail.value].accessToken || null;
 				getVideo(facId)
 			}
 			
@@ -69,13 +73,30 @@
 			onMounted(()=>{
 				getDevicepage()
 			})
+			
+			// 按下事件
+			const handelDown = ()=>{
+				console.log('我按下了')
+			}
+			
+			// 松开事件
+			const handelUp = ()=>{
+				console.log('我松开了')
+			}
+			
+			const handelPhoto = ()=>{
+				console.log('拍照')
+			}
 			return {
 				selectList,
 				index,
 				photoList,
 				bindPickerChange,
 				handelAll,
-				video
+				video,
+				handelDown,
+				handelUp,
+				handelPhoto
 			}
 		}
 		
@@ -117,7 +138,9 @@
 			   return
 			}
 			selectList.value = res.records;
-			facId = selectList.value[0].facId
+			facId = selectList.value[0].facId || null;
+			channel = selectList.value[0].channel || null;
+			accessToken = selectList.value[0].accessToken || null;
 			getVideo(selectList.value[0].facId || null)
 			getPhoto(selectList.value[0].facId || null)
 		}

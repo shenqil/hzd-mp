@@ -69,5 +69,6 @@ export const apiServer2 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
 export const apiServer3 = new HttpServer("https://jxdd.hzdny.cn:44300/datacenter");
 export const apiServer4 = new HttpServer("https://jxdd.hzdny.cn:44300/plant");
 export const apiServer5 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
+export const apiServer6 = new HttpServer("https://open.ys7.com/api/lapp");
 
 export default apiServer;
