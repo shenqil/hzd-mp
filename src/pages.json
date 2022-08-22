@@ -114,7 +114,7 @@
             "path" : "pages/control/imgDetails",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "抓拍列表",
                 "enablePullDownRefresh": false
             }
             
@@ -123,7 +123,7 @@
             "path" : "pages/control/eventDetails",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "事件详情",
                 "enablePullDownRefresh": false
             }
             

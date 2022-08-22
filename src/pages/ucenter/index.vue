@@ -6,8 +6,8 @@
 			  <image src="../../static/ucenter/touxiang.png"></image>
 			</div>
 			<div class="user_right">
-				<div class="user_name">张三</div>
-				<div class="user_phone">手机号码：15333333333&nbsp;&nbsp;&nbsp;职业：写代码 </div>
+				<div class="user_name">{{userInfo.username}}</div>
+				<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职业：{{userInfo.realName}} </div>
 			</div>
 		</div>
     </image>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import ModuleName from '@/components/ModuleName/index.vue'
 export default defineComponent({
@@ -38,14 +38,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const storeCount = computed(()=> store.getters['user/count'])
-    const isLogin = computed(() => store.getters['user/isLogin'])
-    const userInfo = computed(() => store.getters['user/userInfo'])
-
+    const userInfo = ref(store.state.user.user)
     onMounted(() => {
-    //   setInterval(() => {
-    //     store.dispatch('user/setCount')
-    //   },1000)
+   
     })
 	
 	// 通讯录
@@ -69,8 +64,6 @@ export default defineComponent({
 		})
 	}
     return {
-      storeCount,
-      isLogin,
       userInfo,
 	  handeltxl,
 	  handelwx,

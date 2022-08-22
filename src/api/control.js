@@ -79,6 +79,10 @@ async function getPhoto(params = {}) {
 	  ...params
   });
 }
+// 修改用户信息
+async function getXphUser(params = {}) {
+  return await apiServer.postFromData(`/xphUser/update`,{ ...params });
+}
 export default {
 	getEventList,
 	getTaskList,
@@ -91,5 +95,6 @@ export default {
     getplantType,
     getDevicepage,
 	getVideo,
-	getPhoto
+	getPhoto,
+	getXphUser
 }

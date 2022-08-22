@@ -30,7 +30,7 @@
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import InfoElement from '@/components/InfoElement/index.vue';
 	let pageNum = 1;
-	let pageSize = 10;
+	let pageSize = 10000;
 	let pages = 0;
 	export default defineComponent({
 		components: {

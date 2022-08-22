@@ -17,33 +17,41 @@
 </template>
 
 <script>
-	export default {
+	import { defineComponent, ref} from 'vue'
+	export default defineComponent({
 		name:"imgTab",
 		props:{
 			photoList: Array
 		},
-		data() {
-			return {
-				isGet:true,
-				loadTxt:""
-			};
-		},
-		methods:{
+		setup(props,context){
+			const isGet = ref(true)
+			const loadTxt = ref(null)
+			if(props.photoList.length === 0){
+				console.log(30)
+				loadTxt.value = '暂无数据'
+			}
+			
 			/* 预览照片 */
-			previewPhoto(e){
+			const previewPhoto = (e)=>{
 				
 				let index=e.currentTarget.dataset.index;
-				let list=this.photoList.map((item,index)=>{
+				let list=props.photoList.map((item,index)=>{
 					return item.url;
 				});
-				console.log(list,97)
 				uni.previewImage({
 					current:list[index],	
 					urls: list
 				});
 			}
+			
+			
+			return{
+				isGet,
+				loadTxt,
+				previewPhoto
+			}
 		}
-	}
+	})
 </script>
 
 
@@ -91,5 +99,9 @@
 		font-size: 24upx;
 		color: #999;
 		padding-bottom: 20rpx;
+	}
+	.nodata{
+		text-align: center;
+		line-height: 80rpx;
 	}
 </style>

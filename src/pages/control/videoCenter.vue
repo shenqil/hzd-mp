@@ -9,7 +9,7 @@
 				</view>
 			</view>
 		</view>
-		<video title="这是一个视频" class="video_box"
+		<video :autoplay='true'  :show-play-btn="false" :show-fullscreen-btn="true" :title="index !=null?selectList[index].facName:''" class="video_box"
 			:src="video"></video>
 		<!-- 设备操作 -->
 		<view class="video_event">
@@ -43,7 +43,7 @@
 	import store from "@/store/index";
 	import ModuleName from '@/components/ModuleName/index.vue'
 	import imgTab from '@/components/imgTab/imgTab.vue'
-	
+	let facId = null
 	export default defineComponent({
 		components:{
 			ModuleName,
@@ -56,13 +56,13 @@
 			
 			const bindPickerChange = (e)=>{
 				index.value = e.detail.value
-			    let facId = selectList.value[e.detail.value].facId
+			    facId = selectList.value[e.detail.value].facId
 				getVideo(facId)
 			}
 			
 			const handelAll = ()=>{
 				uni.navigateTo({
-					url:"/pages/control/imgDetails"
+					url:`/pages/control/imgDetails?id=${facId}`
 				})
 			}
 			const { selectList, getDevicepage, getVideo, video, photoList } = dataListAll()
@@ -86,22 +86,22 @@
 		const video = ref(null)
 		const photoList = ref(
 			[
-				{
-					url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-					active: true
-				},
-				{
-					url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-					active: true
-				},
-				{
-					url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-					active: true
-				},
-				{
-					url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-					active: true
-				}
+				// {
+				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
+				// 	active: true
+				// },
+				// {
+				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
+				// 	active: true
+				// },
+				// {
+				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
+				// 	active: true
+				// },
+				// {
+				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
+				// 	active: true
+				// }
 			]
 		)
 		async function getDevicepage(){
@@ -117,6 +117,7 @@
 			   return
 			}
 			selectList.value = res.records;
+			facId = selectList.value[0].facId
 			getVideo(selectList.value[0].facId || null)
 			getPhoto(selectList.value[0].facId || null)
 		}
@@ -131,10 +132,13 @@
 			let params = {
 				facId: facId,
 				pageNum: 1,
-				pageSize: 4
+				pageSize: 4,
+				type: 0
 			}
 			let res = await controlApi.getPhoto({...params});
-			// video.value = res.hls
+			
+			photoList.value = res.records;
+			console.log(photoList.value.length,138)
 		}
 		return{
 			selectList,
@@ -142,7 +146,7 @@
 			getVideo,
 			video,
 			getPhoto,
-			photoList
+			photoList,
 		}
 	}
 </script>
