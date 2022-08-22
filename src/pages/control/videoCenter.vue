@@ -75,13 +75,26 @@
 			})
 			
 			// 按下事件
-			const handelDown = ()=>{
+			const handelDown = (direction)=>{
 				console.log('我按下了')
+				const params = {
+					accessToken: accessToken,
+					deviceSerial: facId,
+					channelNo: channel,
+					direction,
+					speed: 1,
+				};
 			}
 			
 			// 松开事件
 			const handelUp = ()=>{
 				console.log('我松开了')
+				const payload = {
+					accessToken: accessToken,
+					deviceSerial: facId,
+					channelNo: channel,
+				};
+				
 			}
 			
 			const handelPhoto = ()=>{
