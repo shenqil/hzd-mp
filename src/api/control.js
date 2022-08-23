@@ -1,4 +1,4 @@
-import { apiServer, apiServer2,apiServer3, apiServer4, apiServer5, apiServer6} from "@/http/index";
+import { apiServer, apiServer2,apiServer3, apiServer4, apiServer5, apiServer6, apiServer7} from "@/http/index";
 
 // 获取事件列表
 async function getEventList(params = {}) {
@@ -86,19 +86,19 @@ async function getXphUser(params = {}) {
 
 // 抓拍
 async function getCapture(params = {}) {
-  return await apiServer.postFromData(`/video/capture/${params}`);
+  return await apiServer7.get(`/video/capture/${params}`);
 }
 
 // 摄像头操作
 async function getStart(params = {}) {
-  return await apiServer.postFromData(`/device/ptz/start`,{ ...params });
+  return await apiServer6.postFromData(`/device/ptz/start`,{ ...params });
 }
 
 
 
 // 摄像头停止操作
 async function getStop(params = {}) {
-  return await apiServer.postFromData(`/device/ptz/stop`,{ ...params });
+  return await apiServer6.postFromData(`/device/ptz/stop`,{ ...params });
 }
 
 export default {

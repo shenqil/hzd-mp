@@ -46,6 +46,7 @@
 	let facId = null;
 	let channel = null;
 	let accessToken = null;
+	let serialNumber = null
 	export default defineComponent({
 		components:{
 			ModuleName,
@@ -59,8 +60,6 @@
 			const bindPickerChange = (e)=>{
 				index.value = e.detail.value
 			    facId = selectList.value[e.detail.value].facId;
-				channel = selectList.value[e.detail.value].channel || null;
-				accessToken = selectList.value[e.detail.value].accessToken || null;
 				getVideo(facId)
 			}
 			
@@ -69,7 +68,7 @@
 					url:`/pages/control/imgDetails?id=${facId}`
 				})
 			}
-			const { selectList, getDevicepage, getVideo, video, photoList } = dataListAll()
+			const { selectList, getDevicepage, getVideo, video, photoList, getStart, getStop, getCapture } = dataListAll()
 			onMounted(()=>{
 				getDevicepage()
 			})
@@ -79,26 +78,27 @@
 				console.log('我按下了')
 				const params = {
 					accessToken: accessToken,
-					deviceSerial: facId,
+					deviceSerial: serialNumber,
 					channelNo: channel,
 					direction,
 					speed: 1,
 				};
+				getStart(params)
 			}
 			
 			// 松开事件
 			const handelUp = ()=>{
 				console.log('我松开了')
-				const payload = {
+				const params = {
 					accessToken: accessToken,
-					deviceSerial: facId,
+					deviceSerial: serialNumber,
 					channelNo: channel,
 				};
-				
+				getStop(params)
 			}
-			
+			// 拍照
 			const handelPhoto = ()=>{
-				console.log('拍照')
+				getCapture()
 			}
 			return {
 				selectList,
@@ -118,26 +118,8 @@
 	function dataListAll(){
 		const selectList = ref([]);
 		const video = ref(null)
-		const photoList = ref(
-			[
-				// {
-				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-				// 	active: true
-				// },
-				// {
-				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-				// 	active: true
-				// },
-				// {
-				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-				// 	active: true
-				// },
-				// {
-				// 	url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg2.woyaogexing.com%2F2017%2F10%2F06%2Fe1329828d8453d50%21400x400_big.jpg&refer=http%3A%2F%2Fimg2.woyaogexing.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1662018586&t=3d5177d8f0a38792c2f9bfc24e571f5d",
-				// 	active: true
-				// }
-			]
-		)
+		const photoList = ref([])
+		// 获取设备
 		async function getDevicepage(){
 			const params = {
 				creatorId: store.state.user.tokenInfo.userId,
@@ -152,18 +134,20 @@
 			}
 			selectList.value = res.records;
 			facId = selectList.value[0].facId || null;
-			channel = selectList.value[0].channel || null;
-			accessToken = selectList.value[0].accessToken || null;
+			
 			getVideo(selectList.value[0].facId || null)
 			getPhoto(selectList.value[0].facId || null)
 		}
-		
+		// 获取视频流
 		async function getVideo(facId){
 			
 			let res = await controlApi.getVideo(facId);
 			video.value = res.hls
+			channel = res.channel || null;
+			accessToken = res.accessToken || null;
+			serialNumber = res.serialNumber || null
 		}
-		
+		// 获取照片
 		async function getPhoto(facId){
 			let params = {
 				facId: facId,
@@ -176,6 +160,31 @@
 			photoList.value = res.records;
 			console.log(photoList.value.length,138)
 		}
+		// 视频操作
+		async function getStart(params){
+			let res = await controlApi.getStart({...params});
+			console.log(res,164)
+		}
+		// 操作停止
+		async function getStop(params){
+			let res = await controlApi.getStop({...params});
+		}
+		// 拍照
+		async function getCapture(params){
+			let res = await controlApi.getCapture(facId);
+			console.log(res,164)
+			if(res){
+				uni.showToast({
+					title: `操作成功`
+				})
+			}else{
+				uni.showToast({
+					title: `操作失败`,
+					icon:'error'
+				})
+			}
+		}
+		
 		return{
 			selectList,
 			getDevicepage,
@@ -183,6 +192,9 @@
 			video,
 			getPhoto,
 			photoList,
+			getStart,
+			getStop,
+			getCapture
 		}
 	}
 </script>
