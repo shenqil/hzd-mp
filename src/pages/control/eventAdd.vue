@@ -66,9 +66,10 @@
 		ref,
 		onMounted
 	} from 'vue'
-	import { apiServer } from "@/http/index";
+	import { apiServer3 } from "@/http/index";
 	import store from "@/store/index";
 	import controlApi from '@/api/control';
+	let id = null;
 	export default defineComponent({
 
 		setup() {
@@ -89,12 +90,12 @@
 					success: (chooseImageRes) => {
 						const tempFilePaths = chooseImageRes.tempFilePaths;
 						uni.uploadFile({
-							url:apiServer.baseUrl + '/file/image/uplode', //仅为示例，非真实的接口地址
+							url:apiServer3.baseUrl + '/file/image/uplode', //仅为示例，非真实的接口地址
 							filePath: tempFilePaths[0],
 							name: 'file',
 							formData: {
 								'user': 'test',
-								 sysDictItemId:30
+								 sysDictItemId: id
 							},
 							success: (uploadFileRes) => {
 							 
@@ -193,9 +194,22 @@
 			const res1 = await controlApi.getxphUserList({
 					 
 			})
-			userList.value = res1.obj.records
+
+			const res3 = await controlApi.getsysDictList({
+					 dictCode: 'upload'
+			})
+			if(res3.obj.length != 0){
+				res3.obj.forEach(element => {
+					if(element.itemText === '事件上报'){
+						id = element.id
+					}
+				})
+			}
+			
 		}
-		
+
+
+		// 事件添加
 		async function getEventReport(params){
 			console.log(params,168)
 			

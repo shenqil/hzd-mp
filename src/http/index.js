@@ -66,7 +66,7 @@ export class HttpServer {
 
 export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300");
 export const apiServer2 = new HttpServer("https://open.ys7.com/api/lapp");
-export const apiServer3 = new HttpServer("http://47.105.215.208:8005");
+export const apiServer3 = new HttpServer("http://47.104.191.212:20010");
 
 
 export default apiServer;

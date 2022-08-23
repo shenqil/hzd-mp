@@ -1,4 +1,4 @@
-import { apiServer, apiServer2, apiServer3} from "@/http/index";
+import { apiServer, apiServer2 } from "@/http/index";
 
 // 获取事件列表
 async function getEventList(params = {}) {
@@ -86,7 +86,7 @@ async function getXphUser(params = {}) {
 
 // 抓拍
 async function getCapture(params = {}) {
-  return await apiServer3.get(`/video/capture/${params}`);
+  return await apiServer.get(`/xph/video/capture/${params}`);
 }
 
 // 摄像头操作
