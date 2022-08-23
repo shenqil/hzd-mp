@@ -21,16 +21,12 @@
 	export default defineComponent({
 		name:"imgTab",
 		props:{
-			photoList: Array
+			photoList: Array,
+			loadTxt: String
 		},
 		setup(props,context){
 			const isGet = ref(true)
-			const loadTxt = ref(null)
-			if(props.photoList.length === 0){
-				console.log(30)
-				loadTxt.value = '暂无数据'
-			}
-			
+				
 			/* 预览照片 */
 			const previewPhoto = (e)=>{
 				
@@ -47,7 +43,6 @@
 			
 			return{
 				isGet,
-				loadTxt,
 				previewPhoto
 			}
 		}

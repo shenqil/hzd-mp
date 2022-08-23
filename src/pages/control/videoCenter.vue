@@ -56,7 +56,6 @@
 			const array = ref(['A型架第一监控设备', 'B型架第一监控设备', 'C型架第一监控设备', 'D型架第一监控设备'])
 			const index = ref(0)
 			
-			
 			const bindPickerChange = (e)=>{
 				index.value = e.detail.value
 			    facId = selectList.value[e.detail.value].facId;
@@ -153,17 +152,19 @@
 				facId: facId,
 				pageNum: 1,
 				pageSize: 4,
-				type: 0
+				type: 1
 			}
 			let res = await controlApi.getPhoto({...params});
-			
+			if(res.records.length != 0){
+				res.records.forEach(element => {
+					element.active = true
+				});
+			}
 			photoList.value = res.records;
-			console.log(photoList.value.length,138)
 		}
 		// 视频操作
 		async function getStart(params){
 			let res = await controlApi.getStart({...params});
-			console.log(res,164)
 		}
 		// 操作停止
 		async function getStop(params){

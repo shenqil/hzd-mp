@@ -64,13 +64,9 @@ export class HttpServer {
   }
 }
 
-export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300/base");
-export const apiServer2 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
-export const apiServer3 = new HttpServer("https://jxdd.hzdny.cn:44300/datacenter");
-export const apiServer4 = new HttpServer("https://jxdd.hzdny.cn:44300/plant");
-export const apiServer5 = new HttpServer("https://jxdd.hzdny.cn:44300/xph");
-export const apiServer6 = new HttpServer("https://open.ys7.com/api/lapp");
-export const apiServer7 = new HttpServer("http://47.105.215.208:8005");
+export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300");
+export const apiServer2 = new HttpServer("https://open.ys7.com/api/lapp");
+export const apiServer3 = new HttpServer("http://47.105.215.208:8005");
 
 
 export default apiServer;
