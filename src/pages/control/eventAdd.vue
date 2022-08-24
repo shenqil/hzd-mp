@@ -195,6 +195,8 @@
 					 
 			})
 
+			userList.value = res1.obj.records
+
 			const res3 = await controlApi.getsysDictList({
 					 dictCode: 'upload'
 			})
