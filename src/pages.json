@@ -51,6 +51,12 @@
       }
     },
     {
+      "path": "pages/recognition/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/ucenter/index",
       "style": {
         "navigationBarTitleText": "我的页面"

@@ -13,6 +13,13 @@ export default defineComponent({
 
       // 监听路由变化
       (uni as any).onAppRoute((route:any) => {
+        console.log(route.path)
+        // ar 不用拦截
+        if(route.path == 'pages/recognition/index') {
+          return
+        }
+
+        // 未登录，非登录页全部拦截
         if (!isLogin.value && route.path != 'pages/login/login') {
           uni.redirectTo({
             url: "/pages/login/login",
