@@ -95,7 +95,6 @@ async function getStart(params = {}) {
 }
 
 
-
 // 摄像头停止操作
 async function getStop(params = {}) {
   return await apiServer2.postFromData(`/device/ptz/stop`,{ ...params });
