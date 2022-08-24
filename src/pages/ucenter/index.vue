@@ -14,9 +14,9 @@
        <!-- 通讯录 -->
     <view class="user_monitor">
       <view class="user_monitor-name">
-        <ModuleName :name="'通讯录'" />
+        <ModuleName :name="'AR'" />
       </view>
-      <div class="user_name" @click="handeltxl"> <image class="txl" src="../../static/ucenter/txl.png"></image> 通讯录</div>
+      <div class="user_name" @click="handeltxl"> <image class="txl" src="../../static/ucenter/txl.png"></image> AR</div>
     </view>
 	<!-- 公众号 -->
 	<view class="user_monitor">
@@ -46,7 +46,7 @@ export default defineComponent({
 	// 通讯录
 	const handeltxl = (()=>{
 		uni.navigateTo({
-			url:"/pages/ucenter/txl"
+			url:"/pages/ar/index"
 		})
 	})
 	

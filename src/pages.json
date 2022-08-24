@@ -18,10 +18,10 @@
         "text": "管理"
       },
       {
-        "pagePath": "pages/ar/index",
+        "pagePath": "pages/ucenter/txl",
         "iconPath": "static/tabbar/ar.png",
         "selectedIconPath": "static/tabbar/ar-selected.png",
-        "text": "AR"
+        "text": "通讯录"
       },
       {
         "pagePath": "pages/ucenter/index",

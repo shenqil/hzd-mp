@@ -48,8 +48,9 @@ import {
   nextTick,
   computed,
   watch,
+  onMounted,
+  onUnmounted
 } from "vue";
-import { onShow, onHide } from "@dcloudio/uni-app";
 
 export default defineComponent({
   setup(props, context) {
@@ -251,11 +252,11 @@ export default defineComponent({
       console.error(e);
     }
 
-    onShow(() => {
+    onMounted(() => {
       isShow.value = true;
       console.log("AR Show");
     });
-    onHide(() => {
+    onUnmounted(() => {
       console.log("AR Hide");
       isShow.value = false;
       cameraData.value = null;
