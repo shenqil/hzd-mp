@@ -57,120 +57,102 @@
       }
     },
     {
+      "path": "pages/home/warnDetails",
+      "style": {
+        "navigationBarTitleText": "告警详情"
+      }
+    },
+    {
       "path": "pages/ucenter/index",
       "style": {
         "navigationBarTitleText": "我的页面"
       }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/ucenter/txl",
+      "style": {
+        "navigationBarTitleText": "通讯录",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/videoCenter",
+      "style": {
+        "navigationBarTitleText": "视频中心",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/plantingCenter",
+      "style": {
+        "navigationBarTitleText": "种植中心",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/task",
+      "style": {
+        "navigationBarTitleText": "作业管理",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/eventCenter",
+      "style": {
+        "navigationBarTitleText": "事件中心",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/control/imgDetails",
+      "style": {
+        "navigationBarTitleText": "抓拍列表",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/eventDetails",
+      "style": {
+        "navigationBarTitleText": "事件详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/eventAdd",
+      "style": {
+        "navigationBarTitleText": "添加事件",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/plantingDetails",
+      "style": {
+        "navigationBarTitleText": "种植详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/control/taskDetails",
+      "style": {
+        "navigationBarTitleText": "作业详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/ucenter/edit",
+      "style": {
+        "navigationBarTitleText": "修改资料",
+        "enablePullDownRefresh": false
+      }
     }
-        ,{
-            "path" : "pages/login/login",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "登录",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/ucenter/txl",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "通讯录",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/videoCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "视频中心",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/plantingCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "种植中心",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/task",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "作业管理",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/eventCenter",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "事件中心",
-                "enablePullDownRefresh": true
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/imgDetails",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "抓拍列表",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/eventDetails",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "事件详情",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/eventAdd",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "添加事件",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/plantingDetails",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "种植详情",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/control/taskDetails",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "作业详情",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/ucenter/edit",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "修改资料",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
