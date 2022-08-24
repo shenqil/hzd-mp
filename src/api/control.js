@@ -86,7 +86,7 @@ async function getXphUser(params = {}) {
 
 // 抓拍
 async function getCapture(params = {}) {
-  return await apiServer.get(`/xph/video/capture/${params}`);
+  return await apiServer.get(`/base/file/video/capture/${params}`);
 }
 
 // 摄像头操作
