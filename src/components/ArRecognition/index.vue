@@ -64,6 +64,7 @@ export default defineComponent({
       plantName: "",
       description: "",
       photo: "",
+      count: 0
     });
     const isStartTask = computed(() => {
       return isShow.value && isInitdone.value;
@@ -108,7 +109,17 @@ export default defineComponent({
 
 
       console.log(res,'uploadFile')
-      scanInfo.plantName = res.plantName;
+      if(scanInfo.plantName != res.plantName){
+        scanInfo.plantName = res.plantName;
+        scanInfo.count = 0
+      }
+
+      scanInfo.count++ 
+
+      if(scanInfo.count <= 1) {
+        throw "数据不稳定"
+      }
+
       scanInfo.description = res.description;
     }
 
