@@ -19,8 +19,8 @@
       },
       {
         "pagePath": "pages/ucenter/txl",
-        "iconPath": "static/tabbar/ar.png",
-        "selectedIconPath": "static/tabbar/ar-selected.png",
+        "iconPath": "static/tabbar/txl.png",
+        "selectedIconPath": "static/tabbar/txl-selected.png",
         "text": "通讯录"
       },
       {
