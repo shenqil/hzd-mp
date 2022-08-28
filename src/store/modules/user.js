@@ -1,23 +1,23 @@
-import auth from '@/api/auth';
+import auth from "@/api/auth";
 
 function getStorageInfo(key) {
-  const t = uni.getStorageSync(key)
+  const t = uni.getStorageSync(key);
   try {
-      if(t) {
-          const info = JSON.parse(t)
-          return info
-      }
+    if (t) {
+      const info = JSON.parse(t);
+      return info;
+    }
   } catch (error) {
-      console.error(error)
+    console.error(error);
   }
 
-  return {}
+  return {};
 }
 
 const state = {
-  tokenInfo: getStorageInfo('token_key'),
-  user: getStorageInfo('user_key'),
-  lowerRole: getStorageInfo('role_key')
+  tokenInfo: getStorageInfo("token_key"),
+  user: getStorageInfo("user_key"),
+  lowerRole: getStorageInfo("role_key"),
 };
 
 const mutations = {
@@ -45,25 +45,36 @@ const mutations = {
 };
 
 const actions = {
-  async login({ commit },{username,password}) {
+  async login({ commit }, { username, password }) {
     const res = await auth.login({
       username,
-      password
-    })
-    
-    if(!res.token) {
-      throw res.message
+      password,
+    });
+
+    if (!res.token) {
+      throw res.message;
     }
 
     commit("setTokenInfo", {
       token: res.token,
       expiration: res.expiration,
-      userId: res.userId
-    })
+      userId: res.userId,
+    });
 
-    commit("changeUserInfo", res.user)
-    commit("changeLowerRole", res.lowerRole)
-  } 
+    commit("changeUserInfo", res.user);
+    commit("changeLowerRole", res.lowerRole);
+  },
+  async signOut({ commit }) {
+    commit("setTokenInfo", {});
+
+    commit("changeUserInfo", {});
+    commit("changeLowerRole", {});
+    setTimeout(() => {
+      uni.redirectTo({
+        url: "/pages/login/login",
+      });
+    });
+  },
 };
 
 const getters = {

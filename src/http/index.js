@@ -16,7 +16,9 @@ export class HttpServer {
     return new Promise((resolve, reject) => {
       const _options = {
         header: {
-          "content-type": !isFromData ? "application/json" : 'application/x-www-form-urlencoded',
+          "content-type": !isFromData
+            ? "application/json"
+            : "application/x-www-form-urlencoded",
         },
         ...this.defaultOptions,
         ...options,
@@ -36,9 +38,14 @@ export class HttpServer {
         },
         ..._options,
         success: (res) => {
+          if (res.statusCode == 403) {
+            store.dispatch("user/signOut");
+            reject(res.statusCode);
+            return;
+          }
           if (res.statusCode != 200) {
-            reject(res.statusCode)
-            return
+            reject(res.statusCode);
+            return;
           }
           resolve(res.data);
         },
@@ -56,17 +63,20 @@ export class HttpServer {
   }
 
   postFromData(url, params = {}, options = {}) {
-    return this.get(url, params, {
-      method: "POST",
-      ...options,
-
-    }, true);
+    return this.get(
+      url,
+      params,
+      {
+        method: "POST",
+        ...options,
+      },
+      true
+    );
   }
 }
 
 export const apiServer = new HttpServer("https://jxdd.hzdny.cn:44300");
 export const apiServer2 = new HttpServer("https://open.ys7.com/api/lapp");
 export const apiServer3 = new HttpServer("https://jxdd.hzdny.cn:44300/base");
-
 
 export default apiServer;
