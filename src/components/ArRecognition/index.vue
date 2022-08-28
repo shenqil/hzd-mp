@@ -121,6 +121,7 @@ export default defineComponent({
       }
 
       scanInfo.description = res.description;
+      scanInfo.count = 0
     }
 
     /**
