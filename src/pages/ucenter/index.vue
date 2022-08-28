@@ -156,7 +156,7 @@ export default defineComponent({
 .sign-out {
 	padding: 80rpx 50rpx;
 	> button {
-		background-color: #3399FF;
+		background-color: rgba(6, 125, 255, 1);
 	}
 }
 </style>

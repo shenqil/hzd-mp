@@ -129,7 +129,7 @@
 			}
 
 			> button {
-				background-color: #3399FF;
+				background-color: rgba(6, 125, 255, 1);
 			}
 		}
 	}
