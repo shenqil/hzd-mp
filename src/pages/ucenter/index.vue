@@ -1,31 +1,37 @@
 <template>
-  <view class="content">
-    <image class="user_title" src = "/static/ucenter/bgc.png">
-        <div class="user_bgc" @click="edit">
-			<div class="user_left">
-			  <image src="../../static/ucenter/touxiang.png"></image>
-			</div>
-			<div class="user_right">
-				<div class="user_name">{{userInfo.roleName}}</div>
-				<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职业：{{userInfo.realName}} </div>
-			</div>
-		</div>
-    </image>
-       <!-- 通讯录 -->
-    <view class="user_monitor">
-      <view class="user_monitor-name">
-        <ModuleName :name="'AR'" />
-      </view>
-      <div class="user_name" @click="handeltxl"> <image class="txl" src="../../static/ucenter/txl.png"></image> AR</div>
-    </view>
-	<!-- 公众号 -->
-	<view class="user_monitor">
-	  <view class="user_monitor-name">
-	    <ModuleName :name="'公众号'" />
-	  </view>
-	  <div class="user_name" @click="handelwx"> <image class="wx" src="../../static/ucenter/wx.png"></image> 关注微信公众号</div>
+	<view class="ucenter">
+		<view class="content">
+			<image class="user_title" src = "/static/ucenter/bgc.png">
+				<div class="user_bgc" @click="edit">
+					<div class="user_left">
+					<image src="../../static/ucenter/touxiang.png"></image>
+					</div>
+					<div class="user_right">
+						<div class="user_name">{{userInfo.roleName}}</div>
+						<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职业：{{userInfo.realName}} </div>
+					</div>
+				</div>
+			</image>
+			<!-- 通讯录 -->
+			<view class="user_monitor">
+			<view class="user_monitor-name">
+				<ModuleName :name="'AR'" />
+			</view>
+			<div class="user_name" @click="handeltxl"> <image class="txl" src="../../static/ucenter/txl.png"></image> AR</div>
+			</view>
+			<!-- 公众号 -->
+			<view class="user_monitor">
+			<view class="user_monitor-name">
+				<ModuleName :name="'公众号'" />
+			</view>
+			<div class="user_name" @click="handelwx"> <image class="wx" src="../../static/ucenter/wx.png"></image> 关注微信公众号</div>
+			</view>
+		</view>
+
+		<view class="sign-out">
+			<button type="primary" @click="signOut">退出</button>
+		</view>
 	</view>
-  </view>
 </template>
 
 <script>
@@ -63,17 +69,29 @@ export default defineComponent({
 			url:"/pages/ucenter/edit"
 		})
 	}
+
+	function signOut () {
+		store.dispatch("user/signOut")
+	}
     return {
       userInfo,
 	  handeltxl,
 	  handelwx,
-	  edit
+	  edit,
+	  signOut
     }
   }
 })
 </script>
 
 <style lang="scss" scoped>
+.ucenter {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-flow: column;
+	justify-content: space-between;
+}
 .content {
   .user_title{
 	  width: 100%;
@@ -135,5 +153,10 @@ export default defineComponent({
   
 }
 
-
+.sign-out {
+	padding: 80rpx 50rpx;
+	> button {
+		background-color: #3399FF;
+	}
+}
 </style>

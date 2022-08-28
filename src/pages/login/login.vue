@@ -127,6 +127,10 @@
 			.cor {
 				color: #3399FF;
 			}
+
+			> button {
+				background-color: #3399FF;
+			}
 		}
 	}
 </style>
