@@ -78,8 +78,18 @@ const actions = {
 };
 
 const getters = {
-  userInfo(state) {
-    return state.user;
+  roleName(state) {
+    if (!Array.isArray(state.lowerRole) || !state.lowerRole.length) {
+      return "";
+    }
+
+    return state.lowerRole[0].roleName || "";
+  },
+  userInfo(state, getters) {
+    return {
+      ...state.user,
+      roleName: getters.roleName,
+    };
   },
   isLogin(state) {
     return !!state.tokenInfo.token;

@@ -6,7 +6,7 @@
 			  <image src="../../static/ucenter/touxiang.png"></image>
 			</div>
 			<div class="user_right">
-				<div class="user_name">{{userInfo.username}}</div>
+				<div class="user_name">{{userInfo.roleName}}</div>
 				<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职业：{{userInfo.realName}} </div>
 			</div>
 		</div>
@@ -38,7 +38,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore()
-    const userInfo = ref(store.state.user.user)
+    const userInfo =  computed(()=>store.getters['user/userInfo'])
     onMounted(() => {
    
     })
