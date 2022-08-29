@@ -323,6 +323,9 @@ function useDeviceInfo(deviceID) {
 
   watch(deviceID, async () => {
     deviceInfoLoading.value = true;
+
+    monitorList.value = [];
+    controlList.value = [];
     try {
       await getDeviceInfo();
     } catch (error) {
@@ -339,8 +342,6 @@ function useDeviceInfo(deviceID) {
 
   // 获取设备信息
   async function getDeviceInfo() {
-    monitorList.value = [];
-    controlList.value = [];
     if (!deviceID.value) {
       return;
     }
@@ -394,7 +395,6 @@ function useTodoInfo(userInfo) {
   }
 
   async function getMessages() {
-    infoList.value = [];
     const res = await homeApi.getMessages(userInfo.value.id);
 
     if (!Array.isArray(res.obj)) {
@@ -410,6 +410,7 @@ function useTodoInfo(userInfo) {
     }
 
     infoLoading.value = true;
+    infoList.value = [];
     try {
       await getMessages();
     } catch (error) {
