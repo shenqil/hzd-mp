@@ -60,7 +60,6 @@
 				index.value = e.detail.value
 			    facId = selectList.value[e.detail.value].facId;
 				getVideo(facId)
-				getPhoto(facId)
 			}
 			
 			const handelAll = ()=>{
@@ -136,16 +135,17 @@
 			facId = selectList.value[0].facId || null;
 			
 			getVideo(selectList.value[0].facId || null)
-			getPhoto(selectList.value[0].facId || null)
+		
 		}
 		// 获取视频流
 		async function getVideo(facId){
-			
+			getPhoto(facId)
 			let res = await controlApi.getVideo(facId);
 			video.value = res.hls
 			channel = res.channel || null;
 			accessToken = res.accessToken || null;
 			serialNumber = res.serialNumber || null
+			
 		}
 		// 获取照片
 		async function getPhoto(facId){
