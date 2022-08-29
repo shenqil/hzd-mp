@@ -42,6 +42,7 @@ import { defineComponent, ref, onMounted, reactive } from 'vue'
 import controlApi from '@/api/control';
 import ModuleName from '@/components/ModuleName/index.vue'
 import InfoElement from '@/components/InfoElement/index.vue';
+import { onShow } from "@dcloudio/uni-app";
 export default defineComponent({
   components: {
 	  
@@ -103,11 +104,14 @@ export default defineComponent({
 	}
 	
 	onMounted(() => {
-	  getEventList()
+	  
 	  getPlantingList()
 	  getTaskList()
 	})
 	
+	onShow(()=>{
+		getEventList()
+	})
 
 	
     return {

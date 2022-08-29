@@ -46,12 +46,6 @@
 			  eventList:[]
 		    }
 		  },
-		created(){
-			pageNum = 1 ;
-			this.eventList = []
-			this.getEventList()
-			this.getSelectList()
-		},
 		onReachBottom() {
 			if(pageNum<pages){
 				pageNum++
@@ -65,6 +59,12 @@
 			this.getEventList()
 			
 		},
+		onShow(){
+			pageNum = 1 ;
+			this.eventList = []
+			this.getEventList()
+			this.getSelectList()
+		},
 		methods:{
 			// 获取筛选列表
 			async getSelectList(){
@@ -74,13 +74,21 @@
 				const res = await controlApi.getxphUserList({
 						  ...params
 				})
-				this.userList = res.obj.records
+				let obj = [
+					{
+						username: '全部',
+						id: null,
+						itemText: '全部',
+						itemValue: null
+					}
+				]
+				this.userList = [...obj,...res.obj.records]
 				
 				const res1 = await controlApi.getsysDictList({
 						 dictCode: 'eventType'
 				})
 				
-				this.eventTypeList = res1.obj
+				this.eventTypeList = [...obj,...res1.obj]
 			},
 			// 获取事件列表
 			async getEventList(){
@@ -116,14 +124,12 @@
 				})
 			},
 			bindPickerChange(e){
-				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.index = e.detail.value;
 				pageNum = 1 ;
 				this.eventList = []
 				this.getEventList()
 			},
 			bindPickerChange1(e){
-				console.log('picker发送选择改变，携带值为', e.detail.value)
 				this.userIndex = e.detail.value;
 				pageNum = 1 ;
 				this.eventList = []

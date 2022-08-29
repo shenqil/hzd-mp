@@ -141,13 +141,13 @@
 					return
 				}
 				
-				if(imgList.value.length === 0){
-					uni.showToast({
-						title: `请上传图片`,
-						icon:'none'
-					})
-					return
-				}
+				// if(imgList.value.length === 0){
+				// 	uni.showToast({
+				// 		title: `请上传图片`,
+				// 		icon:'none'
+				// 	})
+				// 	return
+				// }
 				
 				
 				let params = {

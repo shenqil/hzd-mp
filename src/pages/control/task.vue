@@ -71,16 +71,24 @@
 				let params = {
 					
 				}
+				let obj = [
+					{
+						itemText: '全部',
+						id: null,
+						blockName: '全部',
+						itemValue: null
+					}
+				]
 				const res = await controlApi.getBlockList({
 						  ...params
 				})
-				this.BlockList = res.obj.records
+				this.BlockList =[...obj, ...res.obj.records] 
 				
 				const res1 = await controlApi.getsysDictList({
 						 dictCode: 'farmingType'
 				})
 				
-				this.taskTypeList = res1.obj
+				this.taskTypeList = [...obj, ...res1.obj]
 			},
 			// 获取事件列表
 			async getTaskList(){

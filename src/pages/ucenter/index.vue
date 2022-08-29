@@ -7,8 +7,8 @@
 					<image src="../../static/ucenter/touxiang.png"></image>
 					</div>
 					<div class="user_right">
-						<div class="user_name">{{userInfo.roleName}}</div>
-						<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职业：{{userInfo.realName}} </div>
+						<div class="user_name">{{userInfo.username}}</div>
+						<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职位：{{userInfo.roleName}} </div>
 					</div>
 				</div>
 			</image>

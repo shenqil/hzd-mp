@@ -14,6 +14,10 @@
 		</div>
 		<ContentLine :leftContent="'处理人'" :rightContent="dataDetails.handleMenber" />
 		<ContentLine :leftContent="'备注'" :rightContent="dataDetails.remark" />
+		<ContentLine :leftContent="'事件状态'" :rightContent="dataDetails.statusName" />
+		<div class="checkbox" v-if="dataDetails.statusName === '未确认'">
+			<button type="primary" @click="handelClick">确认</button>
+		</div>
 	</view>
 </template>
 
@@ -40,9 +44,32 @@
 				console.log(dataDetails.value,40)
 			})
 			
+			// 事件确认
+			const handelClick = ()=>{
+				let params = {
+					id : dataDetails.value.id,
+					status : 1,
+				}
+				
+				getState(params)
+				
+			}
 			
+			async  function getState(params){
+				let res = await controlApi.getEventUpdate({...params});
+				console.log(res,55)
+				if(res.flag === 1){
+					dataDetails.value.statusName = '确认';
+					dataDetails.value.status = 1;
+					uni.showToast({
+						title: res.msg,
+						icon:'success'
+					})
+				}
+			}
 			return {
-				dataDetails
+				dataDetails,
+				handelClick
 			}
 		}
 		
@@ -79,6 +106,18 @@
 				text-align: center;
 				line-height: 80rpx;
 			}
+		}
+	}
+	.checkbox {
+		margin: 40rpx 40rpx;
+		padding-bottom: 20rpx;
+	
+		.cor {
+			color: #3399FF;
+		}
+	
+		> button {
+			background-color: rgba(6, 125, 255, 1);
 		}
 	}
 }

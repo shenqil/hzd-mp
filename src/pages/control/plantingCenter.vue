@@ -71,16 +71,24 @@
 				let params = {
 					
 				}
+				let obj = [
+					{
+						plantTypeName: '全部',
+						id: null,
+						blockName: '全部'
+					}
+				]
+				
 				const res = await controlApi.getBlockList({
 						  ...params
 				})
-				this.BlockList = res.obj.records
+				this.BlockList = [...obj,...res.obj.records]
 				
 				const res1 = await controlApi.getplantType({
 						 ...params
 				})
 				
-				this.plantingTypeList = res1.obj.records
+				this.plantingTypeList = [...obj, ...res1.obj.records]
 			},
 			// 获取事件列表
 			async getPlantingList(){

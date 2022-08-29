@@ -100,6 +100,11 @@ async function getStop(params = {}) {
   return await apiServer2.postFromData(`/device/ptz/stop`,{ ...params });
 }
 
+// 事件确认
+async function getEventUpdate(params = {}) {
+  return await apiServer.postFromData(`/base/npEventReport/update`,{ ...params });
+}
+
 export default {
 	getEventList,
 	getTaskList,
@@ -116,5 +121,6 @@ export default {
 	getXphUser,
 	getCapture,
 	getStart,
-	getStop
+	getStop,
+	getEventUpdate
 }

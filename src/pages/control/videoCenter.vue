@@ -53,13 +53,14 @@
 			imgTab
 		},
 		setup() {
-			const array = ref(['A型架第一监控设备', 'B型架第一监控设备', 'C型架第一监控设备', 'D型架第一监控设备'])
+			
 			const index = ref(0)
 			
 			const bindPickerChange = (e)=>{
 				index.value = e.detail.value
 			    facId = selectList.value[e.detail.value].facId;
 				getVideo(facId)
+				getPhoto(facId)
 			}
 			
 			const handelAll = ()=>{
