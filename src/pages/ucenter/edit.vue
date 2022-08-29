@@ -96,14 +96,9 @@
 				})
 				return
 			}
-			
+			userInfo.value.age = userInfo.value.age === null?'': userInfo.value.age
 			let params = {
-				realName: userInfo.value.realName,
-				username: userInfo.value.username,
-				phone: userInfo.value.phone,
-				email: userInfo.value.email,
-				identityCard: userInfo.value.identityCard,
-				creatorId: userInfo.value.creatorId 
+				...userInfo.value
 			}
 			editClick(params)
 		}
