@@ -8,7 +8,7 @@
 		<div class="eventDetails_describe">
 			<div class="describe_title">图片</div>
 			<div class="describe_img">
-				<image v-for="(item,index) in  dataDetails.photo" :key="index" :src="item" mode=""></image>
+				<image v-for="(item,index) in  dataDetails.photo" @click="previewPhoto(index)" :key="index" :src="item" mode=""></image>
 				<div class="nodeData" v-if="dataDetails.photo.length === 0">暂无图片</div>
 			</div>
 		</div>
@@ -67,9 +67,21 @@
 					})
 				}
 			}
+			
+			/* 预览照片 */
+			const previewPhoto = (index)=>{
+				
+				console.log(dataDetails.value.photo)
+				uni.previewImage({
+					current:dataDetails.value.photo[index],	
+					urls: dataDetails.value.photo
+				});
+			}
+			
 			return {
 				dataDetails,
-				handelClick
+				handelClick,
+				previewPhoto
 			}
 		}
 		
