@@ -1,7 +1,6 @@
 <template>
   <view class="camera">
     <camera
-      v-show="!isScanned"
       device-position="back"
       flash="off"
       @error="error"
@@ -134,20 +133,19 @@ export default defineComponent({
       try {
         await arTask();
 
+        cameraData.value = null
         isScanned.value = true;
       } catch (error) {
         console.log(error, "startARTask error");
         // 每秒调用一次
         timeHandle.value = setTimeout(() => {
           startARTask();
-        }, 1000);
+        }, 500);
       }
     }
 
     function startTacking() {
       console.log("startTacking");
-      let count = 0;
-      const speedMaxCount = 30;
       const context = uni.createCameraContext();
       if (!context.onCameraFrame) {
         uni.showToast({
@@ -161,12 +159,6 @@ export default defineComponent({
           if (isScanned.value || !isShow.value) {
             return;
           }
-          if (count < speedMaxCount) {
-            count++;
-            return;
-          }
-          console.log(res, "startTacking");
-          count = 0;
           cameraData.value = markRaw(res);
         })
       );
@@ -256,7 +248,7 @@ export default defineComponent({
     }
 
     function initdone({ detail }) {
-      console.log(detail);
+      console.log(detail,'z-index');
       isInitdone.value = true;
     }
 
@@ -304,12 +296,16 @@ export default defineComponent({
   position: relative;
 
   &_content {
+    position: absolute;
+    top: 0;
+    height: 0;
     width: 100%;
     height: 100%;
+    z-index: 10000;
   }
 
   &_scaning {
-    z-index: 1000;
+    z-index: 10000;
     width: 500rpx;
     height: 500rpx;
     position: absolute;
@@ -319,9 +315,10 @@ export default defineComponent({
     margin-left: -250rpx;
     background-image: url("/static/scan.png");
     background-size: cover;
+    overflow: hidden;
 
     &-img {
-      z-index: 1001;
+      z-index: 10001;
       width: 500rpx;
       position: absolute;
       top: 0;
@@ -346,6 +343,7 @@ export default defineComponent({
     border-radius: 40rpx 40rpx 0px 0px;
     display: flex;
     flex-flow: column;
+    z-index: 10001;
 
     &-title {
       font-family: PingFangSC-Regular;
