@@ -144,7 +144,7 @@ export default defineComponent({
         throw "数据不稳定";
       }
 
-      scanInfo.description = res.description;
+      scanInfo.description = res.plantType?.description || res.description;
       scanInfo.count = 0;
     }
 
@@ -444,6 +444,10 @@ export default defineComponent({
       image {
         width: 40rpx;
         height: 40rpx;
+
+        &:active {
+          opacity: 0.3;
+        }
       }
     }
 
