@@ -23,16 +23,36 @@
         ></image>
       </view>
       <view v-else class="camera_scanned">
-        <view class="camera_scanned-title">{{ scanInfo.plantName }}</view>
-        <view class="camera_scanned-content">
-          {{ scanInfo.description }}
+        <view class="camera_scanned-body">
+          <image class="camera_scanned-back" src="/static/back.png" />
+          <view class="camera_scanned-container">
+            <view class="camera_scanned-wrap">
+              <view class="camera_scanned-img">
+                <image
+                  v-show="scanInfo.photo"
+                  mode="aspectFill"
+                  :src="scanInfo.photo"
+                />
+              </view>
+
+              <view class="camera_scanned-text">
+                <view class="camera_scanned-title">
+                  <view>{{ scanInfo.plantName }}</view>
+                  <image src="/static/record.png" @click="recordHandle" />
+                </view>
+                <view class="camera_scanned-content">
+                  {{ scanInfo.description }}
+                </view>
+              </view>
+            </view>
+          </view>
         </view>
 
-        <view class="camera_scanned-bottom">
-          <view class="camera_scanned-button" @click="reScanHandle"
-            >继续识别</view
-          >
-        </view>
+        <image
+          class="camera_scanned-identify"
+          src="/static/identify.png"
+          @click="reScanHandle"
+        />
       </view>
     </template>
   </view>
@@ -48,8 +68,13 @@ import {
   computed,
   watch,
   onMounted,
-  onUnmounted
+  onUnmounted,
 } from "vue";
+var plugin = requirePlugin("WechatSI");
+// 在js中创建音频对象
+var innerAudioContext = uni.createInnerAudioContext();
+innerAudioContext.autoplay = false; //不让它自动播放
+innerAudioContext.src = "";
 
 export default defineComponent({
   setup(props, context) {
@@ -63,7 +88,7 @@ export default defineComponent({
       plantName: "",
       description: "",
       photo: "",
-      count: 0
+      count: 0,
     });
     const isStartTask = computed(() => {
       return isShow.value && isInitdone.value;
@@ -90,6 +115,7 @@ export default defineComponent({
     );
 
     function reScanHandle() {
+      innerAudioContext.stop();
       isScanned.value = false;
       startARTask();
     }
@@ -106,21 +132,20 @@ export default defineComponent({
       // 2.上传图片
       const res = await uploadFile(scanInfo.photo);
 
-
-      console.log(res,'uploadFile')
-      if(scanInfo.plantName != res.plantName){
+      console.log(res, "uploadFile");
+      if (scanInfo.plantName != res.plantName) {
         scanInfo.plantName = res.plantName;
-        scanInfo.count = 0
+        scanInfo.count = 0;
       }
 
-      scanInfo.count++ 
+      scanInfo.count++;
 
-      if(scanInfo.count <= 1) {
-        throw "数据不稳定"
+      if (scanInfo.count <= 1) {
+        throw "数据不稳定";
       }
 
       scanInfo.description = res.description;
-      scanInfo.count = 0
+      scanInfo.count = 0;
     }
 
     /**
@@ -133,7 +158,7 @@ export default defineComponent({
       try {
         await arTask();
 
-        cameraData.value = null
+        cameraData.value = null;
         isScanned.value = true;
       } catch (error) {
         console.log(error, "startARTask error");
@@ -248,12 +273,32 @@ export default defineComponent({
     }
 
     function initdone({ detail }) {
-      console.log(detail,'z-index');
+      console.log(detail, "z-index");
       isInitdone.value = true;
     }
 
     function error(e) {
       console.error(e);
+    }
+
+    function recordHandle() {
+      console.log("textToSpeech", scanInfo.description);
+      if (!scanInfo.description) {
+        return;
+      }
+      plugin.textToSpeech({
+        lang: "zh_CN",
+        tts: true,
+        content: scanInfo.description,
+        success: function (res) {
+          innerAudioContext.src = res.filename;
+          innerAudioContext.play();
+          console.log("succ tts", res.filename);
+        },
+        fail: function (res) {
+          console.log("fail tts", res);
+        },
+      });
     }
 
     onMounted(() => {
@@ -262,6 +307,7 @@ export default defineComponent({
     });
     onUnmounted(() => {
       console.log("AR Hide");
+      innerAudioContext.stop();
       isShow.value = false;
       cameraData.value = null;
       stopTacking();
@@ -274,6 +320,7 @@ export default defineComponent({
       scanInfo,
       error,
       reScanHandle,
+      recordHandle,
     };
   },
 });
@@ -334,36 +381,80 @@ export default defineComponent({
   &_scanned {
     box-sizing: border-box;
     width: 100%;
-    height: 90%;
-    padding: 80rpx 30rpx 0;
     position: absolute;
     left: 0px;
     bottom: 0px;
-    background: rgba($color: #ffffff, $alpha: 0.7);
-    border-radius: 40rpx 40rpx 0px 0px;
     display: flex;
     flex-flow: column;
     z-index: 10001;
 
+    &-body {
+      margin: 0 auto;
+      position: relative;
+    }
+
+    &-back {
+      width: 600rpx;
+      height: 644rpx;
+    }
+
+    &-container {
+      box-sizing: border-box;
+      width: 600rpx;
+      height: 644rpx;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 108rpx 24rpx 36rpx 56rpx;
+    }
+
+    &-wrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    &-img {
+      width: 520rpx;
+      height: 260rpx;
+
+      image {
+        width: 520rpx;
+        height: 260rpx;
+      }
+    }
+
+    &-text {
+      box-sizing: border-box;
+      width: 520rpx;
+      height: calc(100% - 280rpx);
+      margin-top: 20rpx;
+      background-color: rgba(6, 125, 255, 0.4);
+    }
+
     &-title {
-      font-family: PingFangSC-Regular;
-      font-size: 42rpx;
-      color: #333333;
-      letter-spacing: 1.32rpx;
+      font-size: 32rpx;
+      color: #fff;
       font-weight: 400;
-      text-align: center;
+      padding: 10rpx 20rpx 20rpx 20rpx;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-between;
+      align-items: center;
+
+      image {
+        width: 40rpx;
+        height: 40rpx;
+      }
     }
 
     &-content {
-      margin-top: 40rpx;
+      box-sizing: border-box;
+      padding: 0px 20rpx 20rpx 20rpx;
       width: 100%;
-      height: 495rpx;
-      font-family: PingFangSC-Regular;
-      font-size: 32rpx;
-      color: #333333;
-      letter-spacing: 1.01px;
-      font-weight: 400;
+      height: 148rpx;
+      font-size: 28rpx;
       overflow-y: auto;
+      color: rgba($color: #fff, $alpha: 0.9);
     }
 
     &-bottom {
@@ -376,22 +467,29 @@ export default defineComponent({
       align-items: center;
     }
 
-    &-button {
-      width: 240rpx;
-      height: 80rpx;
-      background: #067dff;
-      border-radius: 8rpx;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      font-family: PingFangSC-Regular;
-      font-size: 32rpx;
-      color: #ffffff;
-      letter-spacing: 1.41rpx;
-      text-align: center;
-      font-weight: 400;
+    &-identify {
+      width: 254rpx;
+      height: 67rpx;
+      margin: 20rpx auto 40rpx;
     }
   }
 }
+
+// .camera_scanned-content::-webkit-scrollbar {
+//   width: 10rpx !important;
+//   height: 10rpx !important;
+//   background-color: rgba(0, 0, 0, 0) !important;
+// }
+
+// /*定义滚动条轨道 内阴影+圆角*/
+// .camera_scanned-content::-webkit-scrollbar-track {
+//   border-radius: 5rpx !important;
+//   background-color: rgba(0, 0, 0, 0) !important;
+// }
+
+// /*定义滑块 内阴影+圆角*/
+// .camera_scanned-content::-webkit-scrollbar-thumb {
+//   border-radius: 5rpx !important;
+//   background-color: rgba(6, 125, 255, 1) !important;
+// }
 </style>
