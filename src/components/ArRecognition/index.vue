@@ -7,11 +7,11 @@
       @initdone="initdone"
       class="camera_content"
     ></camera>
-    <image
+    <!-- <image
       v-show="isScanned"
       class="camera_content"
       :src="scanInfo.photo"
-    ></image>
+    ></image> -->
 
     <template v-if="isInitdone">
       <view v-if="!isScanned" class="camera_scaning">
@@ -286,16 +286,25 @@ export default defineComponent({
       if (!scanInfo.description) {
         return;
       }
+      uni.showLoading({
+        title: "转换中...",
+      });
       plugin.textToSpeech({
         lang: "zh_CN",
         tts: true,
         content: scanInfo.description,
         success: function (res) {
+          uni.hideLoading();
           innerAudioContext.src = res.filename;
           innerAudioContext.play();
           console.log("succ tts", res.filename);
         },
         fail: function (res) {
+          uni.hideLoading();
+          uni.showToast({
+            title: res?.msg || "转换失败",
+            icon: "none",
+          });
           console.log("fail tts", res);
         },
       });

@@ -12,7 +12,7 @@
 				<div class="nodeData" v-if="dataDetails.photo.length === 0">暂无图片</div>
 			</div>
 		</div>
-		<ContentLine :leftContent="'处理人'" :rightContent="dataDetails.handleMenber" />
+		<ContentLine :leftContent="'处理人'" :rightContent="dataDetails.handleMenberName" />
 		<ContentLine :leftContent="'备注'" :rightContent="dataDetails.remark" />
 		<ContentLine :leftContent="'事件状态'" :rightContent="dataDetails.statusName" />
 		<div class="checkbox" v-if="dataDetails.statusName === '未确认'">

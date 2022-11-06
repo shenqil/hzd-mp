@@ -27,7 +27,7 @@
         "pagePath": "pages/ucenter/index",
         "iconPath": "static/tabbar/ucenter.png",
         "selectedIconPath": "static/tabbar/ucenter-selected.png",
-        "text": "我的"
+        "text": "个人中心"
       }
     ]
   },

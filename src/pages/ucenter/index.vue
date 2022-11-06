@@ -7,8 +7,8 @@
 					<image src="../../static/ucenter/touxiang.png"></image>
 					</div>
 					<div class="user_right">
-						<div class="user_name">{{userInfo.username}}</div>
-						<div class="user_phone">手机号码：{{userInfo.phone}}&nbsp;&nbsp;&nbsp;职位：{{userInfo.roleName}} </div>
+						<div class="user_name">{{userInfo.realName}}</div>
+						<div class="user_phone">手机号码：<view @click.stop="callPhone(userInfo.phone)" class="user_phone-inner">{{userInfo.phone}}</view>&nbsp;&nbsp;&nbsp;职位：{{userInfo.roleName}} </div>
 					</div>
 				</div>
 			</image>
@@ -73,12 +73,20 @@ export default defineComponent({
 	function signOut () {
 		store.dispatch("user/signOut")
 	}
+
+	function callPhone(phoneNumber) {
+		uni.makePhoneCall({
+			phoneNumber
+		})
+	}
+
     return {
       userInfo,
 	  handeltxl,
 	  handelwx,
 	  edit,
-	  signOut
+	  signOut,
+	  callPhone
     }
   }
 })
@@ -158,5 +166,9 @@ export default defineComponent({
 	> button {
 		background-color: rgba(6, 125, 255, 1);
 	}
+}
+
+.user_phone-inner {
+	display: inline-block;
 }
 </style>

@@ -7,7 +7,7 @@
         <view class="info-element_discoverer">
             <view class="info-element_discoverer-name">
                 <view class="info-element_discoverer-inner">
-                    {{ elementData.name }}: {{ elementData.discoverer }}
+                    <!-- {{ elementData.name }}: {{ elementData.discoverer }} -->
                 </view>
             </view>
             <view class="info-element_discoverer-time">

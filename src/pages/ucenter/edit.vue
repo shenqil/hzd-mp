@@ -31,6 +31,14 @@
 				<input type="text" v-model="userInfo.identityCard" placeholder="请输入身份证号">
 			</div>
 		</div>
+
+		<div class="taskDetails_box">
+			<div class="taskDetails_left">密码</div>
+			<div class="describe_input">
+				<input type="password" v-model="password" placeholder="请输入密码">
+			</div>
+		</div>
+
 		<div class="btn">
 			<button type="primary" @click="handelClick">提交</button>
 		</div>
@@ -42,11 +50,13 @@
 	import { useStore } from 'vuex'
 	import controlApi from "@/api/control";
 	import ModuleName from '@/components/ModuleName/index.vue'
+	import md5 from 'js-md5'
 	export default defineComponent({
 	  components:{
 	    ModuleName
 	  },
 	  setup() {
+		const password = ref('')
 		const store = useStore()
 		const userInfo =  computed(()=>store.getters['user/userInfo'])
 		// 手机号码验证
@@ -96,10 +106,24 @@
 				})
 				return
 			}
+
+			if(password.value && password.value.length < 6){
+				uni.showToast({
+					title: `请填写6位及以上的密码`,
+					icon:'none'
+				})
+				return
+			}
+
 			userInfo.value.age = userInfo.value.age === null?'': userInfo.value.age
 			let params = {
 				...userInfo.value
 			}
+
+			if(password.value && password.value >= 6){
+				params.password = md5(password.value)
+			}
+
 			editClick(params)
 		}
 		async function editClick(params){
@@ -123,6 +147,7 @@
 			}
 		}
 		return {
+			password,
 			userInfo,
 			handelClick
 		}
