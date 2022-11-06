@@ -106,11 +106,12 @@ export default defineComponent({
 	onMounted(() => {
 	  
 	  getPlantingList()
-	  getTaskList()
+	 
 	})
 	
 	onShow(()=>{
 		getEventList()
+		getTaskList()
 	})
 
 	

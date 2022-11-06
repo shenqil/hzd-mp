@@ -105,6 +105,11 @@ async function getEventUpdate(params = {}) {
   return await apiServer.postFromData(`/base/npEventReport/update`,{ ...params });
 }
 
+// 事件详情完成 https://jxdd.hzdny.cn:44300/base/npFarming/update  参数：id:id, status: 1 (status:1开始，2完成)
+async function npFarmingUpdate(params = {}) {
+  return await apiServer.postFromData(`/base/npFarming/update`,{ ...params });
+}
+
 export default {
 	getEventList,
 	getTaskList,
@@ -122,5 +127,6 @@ export default {
 	getCapture,
 	getStart,
 	getStop,
-	getEventUpdate
+	getEventUpdate,
+  npFarmingUpdate
 }
