@@ -34,7 +34,7 @@ export default defineComponent({
       if (resData.length !== 0) {
         var salesmanMap = new Map();
         resData.forEach((item, index) => {
-          let salesmanName = item.username;
+          let salesmanName = item.realName;
           let firstPinyin = "";
           if (salesmanName !== "") {
             //获取汉字拼音首字母

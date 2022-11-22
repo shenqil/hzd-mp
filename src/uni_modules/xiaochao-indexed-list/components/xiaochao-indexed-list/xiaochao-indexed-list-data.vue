@@ -16,9 +16,9 @@
 						
 						<image class="img" src="/static/ucenter/touxiang.png" mode=""></image>
 						<div class="right">
-							<div class="top">{{shua.username}}</div>
+							<div class="top">{{shua.realName}}</div>
 							<div class="bottom">
-								<span class="lab">{{shua.phone || '--'}}</span>
+								<span class="lab" @click.stop="callPhone(shua.phone)">{{shua.phone || '--'}}</span>
 								<span class="lab">职位：{{shua.userTypeName}}</span>
 							</div>
 						</div>
@@ -82,6 +82,13 @@
 				// #ifdef  VUE2
 				this.$emit('update:zuobiao', ev);
 				// #endif
+			},
+			callPhone(phoneNumber) {
+				if(phoneNumber){
+					uni.makePhoneCall({
+						phoneNumber
+					})
+				}
 			}
 		},
 		watch: {
