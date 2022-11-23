@@ -255,6 +255,7 @@ function useDeviceList(userInfo) {
   async function getBlockList() {
     const res = await homeApi.getBlockList({
       // creatorId: userInfo.value.id
+      parentId:0
     });
     if (!Array.isArray(res.obj.records)) {
       console.error("返回数据不存在");
@@ -281,7 +282,7 @@ function useDeviceList(userInfo) {
     }
 
     deviceData.cur = "0";
-    deviceData.list = res.records;
+    deviceData.list = res.records.filter(({deviceType})=>deviceType!=3);
   }
 
   async function blockInit() {
