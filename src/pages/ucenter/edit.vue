@@ -12,7 +12,7 @@
 				<input type="text" v-model="userInfo.username" placeholder="请输入用户名">
 			</div>
 		</div>
-		<div class="taskDetails_box">
+		<!-- <div class="taskDetails_box">
 			<div class="taskDetails_left">手机号</div>
 			<div class="describe_input">
 				<input type="text" v-model="userInfo.phone" placeholder="请输入手机号">
@@ -30,7 +30,7 @@
 			<div class="describe_input">
 				<input type="text" v-model="userInfo.identityCard" placeholder="请输入身份证号">
 			</div>
-		</div>
+		</div> -->
 
 		<div class="taskDetails_box">
 			<div class="taskDetails_left">密码</div>
